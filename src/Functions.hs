@@ -39,3 +39,18 @@ factorial n =
 fac :: Natural -> Natural
 fac 0 = 1
 fac n = n * fac (n - 1)
+
+someNumbers :: [Integer]
+someNumbers = [49,64,97,54,19,90,934,22,215,6,68,325,720,8082,1,33,31]
+
+sumUp :: [Integer] -> Integer
+sumUp [] = 0
+sumUp (n:rest) = n + sumUp rest
+
+prod :: [Integer] -> Integer
+prod [] = 1
+prod (n:rest) = n * prod rest
+
+betterSum :: [Integer] -> Integer
+betterSum = foldr (+) 0
+
