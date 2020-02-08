@@ -19,4 +19,4 @@ jobs:
         stack init
         stack install
     - name: Run tests
-      run: stack test      
+      run: stack test
