@@ -8,6 +8,21 @@ import Functions (square)
 someNumbers :: [Integer]
 someNumbers = [49,64,97,54,19,90,934,22,215,6,68,325,720,8082,1,33,31]
 
+-- first element of a list
+-- head :: [a] -> a
+-- everything after the head of the list
+-- tail :: [a] -> [a]
+-- last element of a list
+-- last :: [a] -> a
+-- everything but the last element of a list
+-- init :: [a] -> [a]
+
+-- add an element to a list (non-destructive of course)
+-- (:) :: a -> [a] -> [a]
+-- add two lists
+-- (++) :: [a] -> [a] -> [a]
+
+
 -- compute squares for all list elements
 squareAll :: [Integer] -> [Integer]
 squareAll [] = []
@@ -50,6 +65,9 @@ sumUp' = foldr (+) 0
 prod' :: [Integer] -> Integer
 prod' = foldr (*) 1
 
+-- making use of such abstract higher order functions
+-- algorithms can be defined in a dense declarative way
+
 -- now we have map and a reduce, what about the legendary map/reduce?
 -- it's called foldMap in Haskell
 
@@ -67,3 +85,7 @@ someEvenNumbers = filter even someNumbers
 
 someOddNumbers :: [Integer]
 someOddNumbers = filter (\n -> n `rem` 2 /= 0) someNumbers
+
+-- list comprehension
+-- all even numbers
+allEvens = [2,4..]
