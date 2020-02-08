@@ -60,3 +60,10 @@ prod' = foldr (*) 1
 foldMap :: (Monoid m) => (a -> m) -> [a] -> m
 foldMap f = foldr (mappend . f) mempty
 
+-- filtering lists
+-- filter :: (a -> Bool) -> [a] -> [a]
+someEvenNumbers :: [Integer]
+someEvenNumbers = filter even someNumbers
+
+someOddNumbers :: [Integer]
+someOddNumbers = filter (\n -> n `rem` 2 /= 0) someNumbers
