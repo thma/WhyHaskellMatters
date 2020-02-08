@@ -15,8 +15,6 @@ jobs:
         cabal-version: '3.0'
         stack: '2.2.0' 
     - name: Build
-      run: |
-        stack init
-        stack install
+      run: stack install
     - name: Run tests
       run: stack test
