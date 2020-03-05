@@ -1,6 +1,6 @@
-name:                GentleIntroductionToHaskell
+name:                WhyHaskellMatters
 version:             0.1.0.0
-github:              "githubuser/GentleIntroductionToHaskell"
+github:              "thma/WhyHaskellMatters"
 license:             Apache-2.0
 author:              "Thomas Mahler"
 maintainer:          "thma@apache.org"
@@ -16,7 +16,7 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/thma/GentleIntroductionToHaskell#readme>
+description:         Please see the README on GitHub at <https://github.com/thma/WhyHaskellMatters#readme>
 
 dependencies:
 - base >= 4.7 && < 5
@@ -25,19 +25,8 @@ dependencies:
 library:
   source-dirs: src
 
-executables:
-  GentleIntroductionToHaskell-exe:
-    main:                Main.hs
-    source-dirs:         app
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - GentleIntroductionToHaskell
-
 tests:
-  GentleIntroductionToHaskell-test:
+  WhyHaskellMatters-test:
     main:                Spec.hs
     source-dirs:         test
     ghc-options:
@@ -45,4 +34,6 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
-    - GentleIntroductionToHaskell
+    - WhyHaskellMatters
+    - hspec
+    - QuickCheck

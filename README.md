@@ -1,5 +1,4 @@
-# GentleIntroductionToHaskell
-
+# Why Haskell Matters
 
 
 - Funktionen sind 1st class citizens (higher order functions, Funktionen könen neue Funktionen erzeugen und andere Funktionen als Argumente haben)
