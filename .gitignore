@@ -23,3 +23,5 @@ cabal.project.local~
 .ghc.environment.*
 *.cabal
 stack.yaml.lock
+.idea/
+out/
