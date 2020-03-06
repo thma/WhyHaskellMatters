@@ -3,15 +3,23 @@ module Functions where
 import Data.Natural
 import Control.Arrow ((>>>))
 
--- take an Int as argument and compute its square
+-- define constant `aNumber` with a value of 42. 
+aNumber :: Integer
+aNumber = 42
+
+-- define constant `aString` with a value of "hello world"
+aString :: String
+aString = "Hello World"
+
+-- define a function `square` which takes an Integer as argument and compute its square
 square :: Integer -> Integer
 square x = x * x
 
--- take a tuple of two Integers and compute their product
+-- function taking a tuple of two Integers and computing their product
 mul :: (Integer, Integer) -> Integer
 mul (x, y) = x * y
 
--- add two numbers 
+-- function adding two numbers 
 add :: Integer -> Integer -> Integer
 add x y = x + y
 

@@ -8,10 +8,22 @@ import Functions (square)
 someNumbers :: [Integer]
 someNumbers = [49,64,97,54,19,90,934,22,215,6,68,325,720,8082,1,33,31]
 
--- first element of a list
--- head :: [a] -> a
--- everything after the head of the list
--- tail :: [a] -> [a]
+hd :: [a] -> a
+hd l = 
+  if null l
+    then error "hd: empty list"
+    else l !! 0
+
+-- | Extract the first element of a list, which must be non-empty.
+head :: [a] -> a
+head (x:_)              =  x
+head []                 =  error "head: empty list"
+
+-- | Extract the elements after the head of a list, which must be non-empty.
+tail                    :: [a] -> [a]
+tail (_:xs)             =  xs
+tail []                 =  error "tail: empty list"
+
 -- last element of a list
 -- last :: [a] -> a
 -- everything but the last element of a list
@@ -28,6 +40,7 @@ squareAll :: [Integer] -> [Integer]
 squareAll [] = []
 squareAll (n:rest) = square n : squareAll rest
 
+-- compute triples for all list elements
 tripleAll :: [Integer] -> [Integer]
 tripleAll [] = []
 tripleAll (n:rest) = (\i -> i*i*i) n : squareAll rest
