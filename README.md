@@ -30,8 +30,6 @@ Damit lässt sich Seiteneffektfreie Programmierung realisieren ("Purity")
 
 
 
-
-
 - Weniger Bugs durch
 
     - Purity, keine Seiteneffekte
@@ -49,3 +47,35 @@ Damit lässt sich Seiteneffektfreie Programmierung realisieren ("Purity")
     ("Ich habe in 5 Jahre Haskell noch nicht ein einziges Mal debuggen müssen")
 
 - Performance: keine VM, sondern sehr optimierter Maschinencode. Mit ein wenig Feinschliff lassen sich oft Geschwindigkeiten wie bei handoptimiertem C-Code erreichen. 
+
+
+Aufbau
+
+- Werte
+- Funktionen
+- Listen
+- Lazyness
+    - List comprehension
+    - Eigene Kontrollstrukturen
+    
+- Algebraische Datentypen
+    - Summentypen : Ampelstatus
+    - Produkttypen (int, int)
+      Beispiel: Baum mit Knoten (int, Ampelstatus) dann mit map ein Ampelstatus
+- deriving (Show, Read) für einfache Serialisierung
+- Homoiconicity (Kind of)
+- Maybe Datentyp
+    - totale Funktionen
+    - Verkettung von Maybe operationen  
+      (um die "dreadful Staircase" zu vermeiden)
+      => Monoidal Operations
+      
+ - explizite Seiten Effekte -> IO Monade
+ 
+ - TypKlassen
+ - Polymorphismus
+   z.B. Num a, Eq a
+ - Show, Read => Homoiconicity bei Serialisierung
+ - Automatic deriving
+   (Functor mit Baum Beispiel)
+     

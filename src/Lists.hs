@@ -8,31 +8,19 @@ import Functions (square)
 someNumbers :: [Integer]
 someNumbers = [49,64,97,54,19,90,934,22,215,6,68,325,720,8082,1,33,31]
 
-hd :: [a] -> a
-hd l = 
-  if null l
-    then error "hd: empty list"
-    else l !! 0
+-- use list comprehension to generate a list of hundred Integers
+upToHundred :: [Integer]
+upToHundred = [1..100]
 
 -- | Extract the first element of a list, which must be non-empty.
 head :: [a] -> a
-head (x:_)              =  x
-head []                 =  error "head: empty list"
+head (x:_)  =  x
+head []     =  error "head: empty list"
 
 -- | Extract the elements after the head of a list, which must be non-empty.
-tail                    :: [a] -> [a]
-tail (_:xs)             =  xs
-tail []                 =  error "tail: empty list"
-
--- last element of a list
--- last :: [a] -> a
--- everything but the last element of a list
--- init :: [a] -> [a]
-
--- add an element to a list (non-destructive of course)
--- (:) :: a -> [a] -> [a]
--- add two lists
--- (++) :: [a] -> [a] -> [a]
+tail :: [a] -> [a]
+tail (_:xs) =  xs
+tail []     =  error "tail: empty list"
 
 
 -- compute squares for all list elements
@@ -43,7 +31,7 @@ squareAll (n:rest) = square n : squareAll rest
 -- compute triples for all list elements
 tripleAll :: [Integer] -> [Integer]
 tripleAll [] = []
-tripleAll (n:rest) = (\i -> i*i*i) n : squareAll rest
+tripleAll (n:rest) = (\i -> i*i*i) n : tripleAll rest
 
 -- We don't want to repeat ourselves so we want something that captures the essence of mapping a function over a list:
 map :: (a -> b) -> [a] -> [b]
@@ -99,6 +87,4 @@ someEvenNumbers = filter even someNumbers
 someOddNumbers :: [Integer]
 someOddNumbers = filter (\n -> n `rem` 2 /= 0) someNumbers
 
--- list comprehension
--- all even numbers
-allEvens = [2,4..]
+
