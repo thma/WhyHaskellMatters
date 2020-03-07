@@ -73,9 +73,9 @@ Aufbau
  - explizite Seiten Effekte -> IO Monade
  
  - TypKlassen
- - Polymorphismus
-   z.B. Num a, Eq a
- - Show, Read => Homoiconicity bei Serialisierung
- - Automatic deriving
-   (Functor mit Baum Beispiel)
+   - Polymorphismus
+     z.B. Num a, Eq a
+   - Show, Read => Homoiconicity bei Serialisierung
+   - Automatic deriving
+     (Functor mit Baum Beispiel)
      
