@@ -36,6 +36,11 @@ primes = sieve (2:[3,5..])
     
 wenn :: Bool -> b -> b -> b
 wenn p x y = if p then x else y    
+
+cond :: [(Bool, a)] -> [a]
+cond []                 = []
+cond ((True,  v):rest)  = v : cond rest
+cond ((False, _):rest)  = cond rest
     
     
     

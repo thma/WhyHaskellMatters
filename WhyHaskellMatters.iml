@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="HASKELL_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/.stack-work" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="base-4.13.0.0" level="project" />
+    <orderEntry type="library" name="natural-numbers-0.1.2.0" level="project" />
+    <orderEntry type="library" name="QuickCheck-2.13.2" level="project" />
+    <orderEntry type="library" name="hspec-2.7.1" level="project" />
+    <orderEntry type="library" name="ghc-prim-0.5.3" level="project" />
+    <orderEntry type="library" name="integer-gmp-1.0.2.0" level="project" />
+    <orderEntry type="library" name="containers-0.6.2.1" level="project" />
+    <orderEntry type="library" name="deepseq-1.4.4.0" level="project" />
+    <orderEntry type="library" name="random-1.1" level="project" />
+    <orderEntry type="library" name="splitmix-0.0.4" level="project" />
+    <orderEntry type="library" name="template-haskell-2.15.0.0" level="project" />
+    <orderEntry type="library" name="transformers-0.5.6.2" level="project" />
+    <orderEntry type="library" name="hspec-core-2.7.1" level="project" />
+    <orderEntry type="library" name="hspec-discover-2.7.1" level="project" />
+    <orderEntry type="library" name="hspec-expectations-0.8.2" level="project" />
+    <orderEntry type="library" name="array-0.5.4.0" level="project" />
+    <orderEntry type="library" name="time-1.9.3" level="project" />
+    <orderEntry type="library" name="ghc-boot-th-8.8.2" level="project" />
+    <orderEntry type="library" name="pretty-1.1.3.6" level="project" />
+    <orderEntry type="library" name="HUnit-1.6.0.0" level="project" />
+    <orderEntry type="library" name="ansi-terminal-0.10.3" level="project" />
+    <orderEntry type="library" name="call-stack-0.2.0" level="project" />
+    <orderEntry type="library" name="clock-0.8" level="project" />
+    <orderEntry type="library" name="directory-1.3.4.0" level="project" />
+    <orderEntry type="library" name="filepath-1.4.2.1" level="project" />
+    <orderEntry type="library" name="quickcheck-io-0.2.0" level="project" />
+    <orderEntry type="library" name="setenv-0.1.1.3" level="project" />
+    <orderEntry type="library" name="stm-2.5.0.0" level="project" />
+    <orderEntry type="library" name="tf-random-0.5" level="project" />
+    <orderEntry type="library" name="Win32-2.6.1.0" level="project" />
+    <orderEntry type="library" name="colour-2.3.5" level="project" />
+    <orderEntry type="library" name="mintty-0.1.2" level="project" />
+    <orderEntry type="library" name="primitive-0.7.0.1" level="project" />
+    <orderEntry type="library" name="bytestring-0.10.10.0" level="project" />
+  </component>
+</module>

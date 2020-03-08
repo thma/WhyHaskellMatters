@@ -6,7 +6,7 @@ import Control.Monad ((>=>))
 data Status = Green | Yellow | Red deriving (Eq, Show)
 
 -- a simple product type
-data Pair a b = Tuple a b deriving (Show)
+data Pair a b = P a b deriving (Show)
 
 data Tree a = Leaf a | Node (Tree a) (Tree a) deriving (Show)
 
@@ -40,8 +40,8 @@ findDivRoot' x key map =
   safeRoot d
 
 findDivRoot'' x key map = 
-  findValue key map >>= 
-  (safeDiv x >=> 
+  findValue key map >>=
+  (safeDiv x >=>
   safeRoot)
   
 findDivRoot''' x key map = do
