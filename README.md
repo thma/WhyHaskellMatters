@@ -79,3 +79,5 @@ Aufbau
    - Automatic deriving
      (Functor mit Baum Beispiel)
      
+- Testbarkeit
+    - TDD, higher order functions assembly, Typklassen dispatch
