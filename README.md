@@ -1,5 +1,54 @@
 # Why Haskell Matters
 
+This is a work in progress article.
+
+> Haskell doesn't solve different problems than other languages.
+> But it solves them differently.
+> 
+> -- unknown author
+
+## A strange development over time
+
+In a much quoted talk about [the Haskell journey](https://www.youtube.com/watch?v=re96UgMk6GQ) 
+from the beginnings in the eighties of the last century until 2017 Simon Peyton Jones speaks about the
+rather untypical life story of haskell.
+
+First he shows a chart for the typical life cycle of research languages. They are often created by 
+a single researcher (who also is the single user) and most of them will be abandoned after a few years:
+
+![most research languages](img/language-1.png)
+
+A more successful research language gains some interest in a larger community but will still not 
+escape the "geek" community and typically will die a bit slower:
+
+![successful research languages](img/language-2.png) 
+
+Most popular programming languages are adopted by 
+large number of users and thus will quickly reach "the threshold of immortality".
+That is the base of existing code will grow so large that the language will be used for decades:
+
+![successful research languages](img/language-3.png) 
+
+In the next chart he rather jokingly depicts the sad fate of languages designed by committees.
+They simply never take of:
+
+![commitee languages](img/language-4.png) 
+
+Finally he presents a chart for Haskell:
+
+![commitee languages](img/language-5.png)
+
+The development shown in this chart is rather untypical: 
+As Haskell started as a research language and was 
+designed by a committee it should have been abandoned long before the millennium.
+
+But instead it gained some momentum in the early years followed by a rather quiet phase during 
+the decade of OO hype (Java was released in 1995).
+And then we see a continous growth of interest since about 2005.
+
+## Actual usage versus discussion topic
+
+## So why is Haskell such a hot topic in the software development community?
 
 - Funktionen sind 1st class citizens (higher order functions, Funktionen könen neue Funktionen erzeugen und andere Funktionen als Argumente haben)
 
@@ -40,6 +89,10 @@ Damit lässt sich Seiteneffektfreie Programmierung realisieren ("Purity")
 
     - sehr gute Testbarkeit durch "Composobility"
     
+        - das "ports & adapters" Beispiel: https://github.com/thma/RestaurantReservation
+        
+        - TDD / DDD
+    
     - Memory Management (sehr schneller GC)
 
     - Modulare Programme. Es gibt ein sehr einfaches aber effektive Modul System und eine grosse Vielzahl kuratierter Bibliotheken.
@@ -49,7 +102,7 @@ Damit lässt sich Seiteneffektfreie Programmierung realisieren ("Purity")
 - Performance: keine VM, sondern sehr optimierter Maschinencode. Mit ein wenig Feinschliff lassen sich oft Geschwindigkeiten wie bei handoptimiertem C-Code erreichen. 
 
 
-Aufbau
+## toc for code chapters (still in german)
 
 - Werte
 - Funktionen
@@ -80,4 +133,4 @@ Aufbau
      (Functor mit Baum Beispiel)
      
 - Testbarkeit
-    - TDD, higher order functions assembly, Typklassen dispatch
+    - TDD, higher order functions assembly, Typklassen dispatch (https://jproyo.github.io/posts/2019-03-17-tagless-final-haskell.html)
