@@ -2,30 +2,29 @@
 
 This is a work in progress article.
 
-> Haskell doesn't solve different problems than other languages.
-> But it solves them differently.
-> 
-> -- unknown author
 
-## A strange development over time
+## Motivation
 
-In a much quoted talk about [the Haskell journey](https://www.youtube.com/watch?v=re96UgMk6GQ) 
-from the beginnings in the eighties of the last century until 2017 Simon Peyton Jones speaks about the
-rather untypical life story of haskell.
+### A strange development over time
 
-First he shows a chart for the typical life cycle of research languages. They are often created by 
-a single researcher (who also is the single user) and most of them will be abandoned after a few years:
+In a talk on [the Haskell journey](https://www.youtube.com/watch?v=re96UgMk6GQ) 
+from its beginnings in the 1980ies until 2017 Simon Peyton Jones speaks about the
+rather unusual life story of haskell.
+
+First he shows a chart representing the typical life cycle of research languages. They are often created by 
+a single researcher (who also is the single user) and most of them will be abandoned 
+after just a few years:
 
 ![most research languages](img/language-1.png)
 
-A more successful research language gains some interest in a larger community but will still not 
-escape the "geek" community and typically will die a bit slower:
+A more successful research language gains some interest in a larger community 
+but will still not escape the "geek" zone and typically will die a bit slower:
 
 ![successful research languages](img/language-2.png) 
 
-Most popular programming languages are adopted by 
+Typical popular programming languages are adopted by 
 large number of users and thus will quickly reach "the threshold of immortality".
-That is the base of existing code will grow so large that the language will be used for decades:
+That is the base of existing code will grow so large that the language will be in use for decades:
 
 ![successful research languages](img/language-3.png) 
 
@@ -38,17 +37,57 @@ Finally he presents a chart for Haskell:
 
 ![commitee languages](img/language-5.png)
 
-The development shown in this chart is rather untypical: 
-As Haskell started as a research language and was 
-designed by a committee it should have been abandoned long before the millennium.
+The development shown in this chart is rather unexpected and unusual: 
+Haskell started as a research language and was 
+designed by a committee so it should have been abandoned long before the millennium.
 
 But instead it gained some momentum in the early years followed by a rather quiet phase during 
 the decade of OO hype (Java was released in 1995).
-And then we see a continous growth of interest since about 2005.
+And then again we see a continuous growth of interest since about 2005.
 
-## Actual usage versus discussion topic
+### Being used versus being discussed
+
+Then Simon Peyton Jones points out another interesting characteristic of the reception of Haskell 
+in recent years.
+In statics that rank programming languages by actual usage Haskell is typically not under the 30 most active languages.
+But in statistics that rather rank programming languages by the volume of discussions in social media
+Haskell typically scores much better (Often in the top ten).
+
+So why is there so much talk about a language even if it is not one of the most active languages?
+
+A very short answer might be: 
+Haskell has a number of features that are clearly different from thiose of most other programming languages. 
+Many of these features have proven to be powerful tools to solve basic problems of software development elegantly.
+
+Therefore over time other programming languages have adapted parts of these concepts (e.g. pattern matching or type classes).
+In many discussions about such concepts the origin from Haskell is mentioned.
+
+This then contributes to the fact that e.g. Typescript, Scale or Rust developers start to deal with Haskell.
+
+A further essential point is that Haskell is still an experimental laboratory for research in areas such as
+compiler construction, programming languages, proofers, type systems etc.
+Haskell is also inevitably always a topic of discussion in the discussion about these approaches. 
+
+
+Haskell weist etliche Merkmale auf, die sich deutlich von den Konzepten der meisten anderen Programmiersprachen
+unterscheiden. Viele dieser Merkmale haben sich als mächtige Werkzeuge erwiesen, um
+einige grundlegende Probleme der Softwareentwicklung elegant zu lösen.
+Daher haben im Laufe der Zeit andere Programmiersprachen Teile dieser Konzepte adaptiert (z.B. Pattern Matching oder Typklassen).
+In vielen Diskussionen über solche Konzepte wird dann oft auf die Herkunft aus Haskell hingewiesen
+und auf Abweichungen in der Umsetzung der Konzepte eingegangen.
+Das trägt dann mit dazu bei, dass sich z.B. Typescript-, Skala- oder Rust- Entwickler anfangen sich mit Haskell zu beschäftigen.
+
+Ein weiterer wesentlicher Punkt ist, dass Haskell immer noch ein Versuchslabor für Forschung in Bereichen wie
+Compilerbau, Programmiersprachen, Beweiser, Typsysteme usw. ist.
+Auch in der Diskussion über diese Ansätze wird zwangsläufig Haskell immer thematisiert. 
+
 
 ## So why is Haskell such a hot topic in the software development community?
+
+> Haskell doesn't solve different problems than other languages.
+> But it solves them differently.
+> 
+> -- unknown author
 
 - Funktionen sind 1st class citizens (higher order functions, Funktionen könen neue Funktionen erzeugen und andere Funktionen als Argumente haben)
 
