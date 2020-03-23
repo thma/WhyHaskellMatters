@@ -31,7 +31,7 @@ but will still not escape the ivory tower and typically will die within ten year
 ![successful research languages](img/language-2.png) 
 
 On the other hand we have popular programming languages that are quickly adopted by 
-large number of users and thus reach "the threshold of immortality".
+large numbers of users and thus reach "the threshold of immortality".
 That is the base of existing code will grow so large that the language will 
 be in use for decades:
 
@@ -61,44 +61,52 @@ I'm writing this in early 2020 and we still see this trend.
 Then Simon Peyton Jones points out another interesting characteristic of the reception of Haskell 
 in recent years.
 In statics that rank programming languages by actual usage Haskell is typically not under the 30 most active languages.
-But in statistics that rather rank programming languages by the volume of discussions in social media
-Haskell typically scores much better (Often in the top ten).
+But in statistics that rather rank programming languages by the volume of discussions on the internet
+Haskell typically scores much better (often in the top ten).
 
-So why is there so much talk about a language even if it is not one of the most active languages?
+## So why does Haskell keep to be such a hot topic in the software development community?
 
 A very short answer might be: 
-Haskell has a number of features that are clearly different from thiose of most other programming languages. 
+Haskell has a number of features that are clearly different from those of most other programming languages. 
 Many of these features have proven to be powerful tools to solve basic problems of software development elegantly.
 
-Therefore over time other programming languages have adapted parts of these concepts (e.g. pattern matching or type classes).
-In many discussions about such concepts the origin from Haskell is mentioned.
-
-This then contributes to the fact that e.g. Typescript, Scale or Rust developers start to deal with Haskell.
+Therefore over time other programming languages have adopted parts of these concepts (e.g. pattern matching or type classes).
+In discussions about such concepts the origin from Haskell is mentioned 
+and differences between the Haskell concepts and those of other languages are discussed.
+Sometimes people are encouraged to have a closer look at the source of these concepts to get a deeper understanding of
+their original intentions. That's why we see a growing number of 
+Python-, Typescript-, Scala- or Rust-developers starting to dive into Haskell.
 
 A further essential point is that Haskell is still an experimental laboratory for research in areas such as
-compiler construction, programming languages, proofers, type systems etc.
-Haskell is also inevitably always a topic of discussion in the discussion about these approaches. 
+compiler construction, programming language design, theorem-provers, type systems etc.
+So inevitably Haskell will be a topic in the discussion about these approaches.
 
+In the next section we want to study some of the most distinguishing features of Haskell
 
-Haskell weist etliche Merkmale auf, die sich deutlich von den Konzepten der meisten anderen Programmiersprachen
-unterscheiden. Viele dieser Merkmale haben sich als mächtige Werkzeuge erwiesen, um
-einige grundlegende Probleme der Softwareentwicklung elegant zu lösen.
-Daher haben im Laufe der Zeit andere Programmiersprachen Teile dieser Konzepte adaptiert (z.B. Pattern Matching oder Typklassen).
-In vielen Diskussionen über solche Konzepte wird dann oft auf die Herkunft aus Haskell hingewiesen
-und auf Abweichungen in der Umsetzung der Konzepte eingegangen.
-Das trägt dann mit dazu bei, dass sich z.B. Typescript-, Skala- oder Rust- Entwickler anfangen sich mit Haskell zu beschäftigen.
-
-Ein weiterer wesentlicher Punkt ist, dass Haskell immer noch ein Versuchslabor für Forschung in Bereichen wie
-Compilerbau, Programmiersprachen, Beweiser, Typsysteme usw. ist.
-Auch in der Diskussion über diese Ansätze wird zwangsläufig Haskell immer thematisiert. 
-
-
-## So why is Haskell such a hot topic in the software development community?
+# So what exactly are those magic powers of Haskell?
 
 > Haskell doesn't solve different problems than other languages.
 > But it solves them differently.
 > 
-> -- unknown author
+> -- unknown
+
+In this section we will examine the most outstanding features of the Haskell language.
+
+## Functions are first class citizens
+
+```haskell
+-- define constant `aNumber` with a value of 42. 
+aNumber :: Integer
+aNumber = 42
+
+-- define constant `aString` with a value of "hello world"
+aString :: String
+aString = "Hello World"
+
+-- define a function `square` which takes an Integer as argument and compute its square
+square :: Integer -> Integer
+square x = x * x
+```
 
 - Funktionen sind 1st class citizens (higher order functions, Funktionen könen neue Funktionen erzeugen und andere Funktionen als Argumente haben)
 
