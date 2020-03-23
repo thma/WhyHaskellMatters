@@ -5,45 +5,56 @@ This is a work in progress article.
 
 ## Motivation
 
+Haskell was started as an academic research language in the late 1980ies.
+It was never one of the most popular languages in the software industry.
+
+So why should we spend our time on it?
+
+Instead of answering this question directly I'd like to first have a closer look on the reception of 
+Haskell in the software developers community:
+
 ### A strange development over time
 
-In a talk on [the Haskell journey](https://www.youtube.com/watch?v=re96UgMk6GQ) 
-from its beginnings in the 1980ies until 2017 Simon Peyton Jones speaks about the
-rather unusual life story of haskell.
+In a talk in 2017 on [the Haskell journey](https://www.youtube.com/watch?v=re96UgMk6GQ) 
+since its beginnings in the 1980ies Simon Peyton Jones speaks about the
+rather unusual life story of Haskell.
 
 First he shows a chart representing the typical life cycle of research languages. They are often created by 
-a single researcher (who also is the single user) and most of them will be abandoned 
+a single researcher (who is also the single user) and most of them will be abandoned 
 after just a few years:
 
 ![most research languages](img/language-1.png)
 
 A more successful research language gains some interest in a larger community 
-but will still not escape the "geek" zone and typically will die a bit slower:
+but will still not escape the ivory tower and typically will die within ten years:
 
 ![successful research languages](img/language-2.png) 
 
-Typical popular programming languages are adopted by 
-large number of users and thus will quickly reach "the threshold of immortality".
-That is the base of existing code will grow so large that the language will be in use for decades:
+On the other hand we have popular programming languages that are quickly adopted by 
+large number of users and thus reach "the threshold of immortality".
+That is the base of existing code will grow so large that the language will 
+be in use for decades:
 
 ![successful research languages](img/language-3.png) 
 
 In the next chart he rather jokingly depicts the sad fate of languages designed by committees.
-They simply never take of:
+They simply never take off:
 
 ![commitee languages](img/language-4.png) 
 
-Finally he presents a chart for Haskell:
+Finally he presents a chart showing the Haskell timeline:
 
 ![commitee languages](img/language-5.png)
 
 The development shown in this chart is rather unexpected and unusual: 
-Haskell started as a research language and was 
-designed by a committee so it should have been abandoned long before the millennium.
+Haskell started as a research language and was even
+designed by a committee; 
+so in all probability it should have been abandoned long before the millennium!
 
 But instead it gained some momentum in the early years followed by a rather quiet phase during 
 the decade of OO hype (Java was released in 1995).
-And then again we see a continuous growth of interest since about 2005.
+And then again we see a continuous growth of interest since about 2005. 
+I'm writing this in early 2020 and we still see this trend.
 
 ### Being used versus being discussed
 
