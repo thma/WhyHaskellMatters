@@ -61,7 +61,7 @@ I'm writing this in early 2020 and we still see this trend.
 Then Simon Peyton Jones points out another interesting characteristic of the reception of Haskell 
 in recent years.
 In statics that rank programming languages by actual usage Haskell is typically not under the 30 most active languages.
-But in statistics that rather rank programming languages by the volume of discussions on the internet
+But in statistics that instead rank programming languages by the volume of discussions on the internet
 Haskell typically scores much better (often in the top ten).
 
 ## So why does Haskell keep to be such a hot topic in the software development community?
@@ -74,14 +74,14 @@ Therefore over time other programming languages have adopted parts of these conc
 In discussions about such concepts the origin from Haskell is mentioned 
 and differences between the Haskell concepts and those of other languages are discussed.
 Sometimes people are encouraged to have a closer look at the source of these concepts to get a deeper understanding of
-their original intentions. That's why we see a growing number of 
-Python-, Typescript-, Scala- or Rust-developers starting to dive into Haskell.
+their original intentions. That's why we see a growing number of developers working in
+Python, Typescript, Scala, Rust, C++, C# or Java starting to dive into Haskell.
 
 A further essential point is that Haskell is still an experimental laboratory for research in areas such as
 compiler construction, programming language design, theorem-provers, type systems etc.
 So inevitably Haskell will be a topic in the discussion about these approaches.
 
-In the next section we want to study some of the most distinguishing features of Haskell
+In the next section we want to study some of the most distinguishing features of Haskell.
 
 # So what exactly are those magic powers of Haskell?
 
@@ -91,8 +91,20 @@ In the next section we want to study some of the most distinguishing features of
 > -- unknown
 
 In this section we will examine the most outstanding features of the Haskell language.
+I'll try to keep the learning curve moderate and so I'll start with some very basic concepts.
+
+Nevertheless this article is not intended to be an introduction to the Haskell language 
+(have a look at [Learn You a Haskell](http://www.learnyouahaskell.com/) if you are looking for an introduction).
 
 ## Functions are first class citizens
+
+Functions are first class citizens means:
+
+- functions are nothing different from any other value. In particular this means that
+- functions can be used as arguments to other functions, and
+- functions can return functions as their return value.
+
+Let's have a look how this looks like in Haskell:
 
 ```haskell
 -- define constant `aNumber` with a value of 42. 
@@ -102,11 +114,25 @@ aNumber = 42
 -- define constant `aString` with a value of "hello world"
 aString :: String
 aString = "Hello World"
+```
 
+In the first line we see a type signature that defines the constant `aNumber` to be of type `Integer`.
+In the second line we define the value of `aNumber` to be `42`.
+In the same way we define the constant `aString` to be of type `String`.
+
+Next we define a function `square` that takes an integer argument and returns the square value of the argument:
+```Haskell
 -- define a function `square` which takes an Integer as argument and compute its square
 square :: Integer -> Integer
 square x = x * x
 ```
+
+Definition of a function works exactly in the same way as the definition of any other value.
+The only thing special is that we declare the type to be a *function type* by using the `->` notation.
+So `:: Integer -> Integer` represents a function from `Integer` to `Integer`.
+In the second line we define function `square` to compute `x * x` for any `Integer` argument `x`.
+
+
 
 - Funktionen sind 1st class citizens (higher order functions, Funktionen könen neue Funktionen erzeugen und andere Funktionen als Argumente haben)
 
