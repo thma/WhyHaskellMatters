@@ -8,7 +8,7 @@ This is a work in progress article.
 Haskell was started as an academic research language in the late 1980ies.
 It was never one of the most popular languages in the software industry.
 
-So why should we spend our time on it?
+So why should we concern ourselves with it?
 
 Instead of answering this question directly I'd like to first have a closer look on the reception of 
 Haskell in the software developers community:
