@@ -169,7 +169,7 @@ add :: Integer -> Integer -> Integer
 ```
 
 What does this signature actually mean?
-It could be understood to mean "A function taking an Integer argument and returning a function of type `Integer -> Integer`"
+It can be read as "A function taking an Integer argument and returning a function of type `Integer -> Integer`".
 Sounds weird? But that's exactly what Haskell does internally. 
 So if we call `add 2 3` first `add` is applied to `2` which return a new function of type `Integer -> Integer` which is then applied to `3`.
 
@@ -188,6 +188,7 @@ add5 = add 5
 The trick is as follows: `add 5` returns a function of type `Integer -> Integer` which will add `5` to any Integer argument.
 
 Partial application thus allows us to write functions that return functions as result values.
+This technique is frequently used to provide functions with configuration data.
 
 ### Functions can be passed as arguments to other functions
 
