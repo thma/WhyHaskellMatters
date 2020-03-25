@@ -1,6 +1,6 @@
 # Why Haskell Matters
 
-This is a work in progress article.
+This is an early draft work in progress article.
 
 
 ## Motivation
@@ -93,8 +93,8 @@ In the next section we want to study some of the most distinguishing features of
 In this section we will examine the most outstanding features of the Haskell language.
 I'll try to keep the learning curve moderate and so I'll start with some very basic concepts.
 
-Nevertheless this article is not intended to be an introduction to the Haskell language 
-(have a look at [Learn You a Haskell](http://www.learnyouahaskell.com/) if you are looking for an introduction).
+Even though I'll try to keep the presentation self-contained it's not intended to be an introduction to the Haskell language 
+(have a look at [Learn You a Haskell](http://www.learnyouahaskell.com/) if you are looking for enjoyable tutorial).
 
 ## First-class Functions
 
@@ -107,7 +107,11 @@ Nevertheless this article is not intended to be an introduction to the Haskell l
 > 
 > quoted from [Wikipedia](https://en.wikipedia.org/wiki/First-class_function)
 
-Let's have a look how this looks like in Haskell. First we define some basic values:
+We'll go through this one by one:
+
+### functions can be assigned to variables exactly as any other other values
+
+Let's have a look how this looks like in Haskell. First we define some simple values:
 
 ```haskell
 -- define constant `aNumber` with a value of 42. 
@@ -125,7 +129,6 @@ In the same way we define the constant `aString` to be of type `String`.
 
 Next we define a function `square` that takes an integer argument and returns the square value of the argument:
 ```Haskell
--- define a function `square` which takes an Integer as argument and compute its square
 square :: Integer -> Integer
 square x = x * x
 ```
@@ -134,6 +137,61 @@ Definition of a function works exactly in the same way as the definition of any 
 The only thing special is that we declare the type to be a **function type** by using the `->` notation.
 So `:: Integer -> Integer` represents a function from `Integer` to `Integer`.
 In the second line we define function `square` to compute `x * x` for any `Integer` argument `x`.
+
+Ok, seems not too difficult, let's define a function `double` that doubles its input value:
+
+```haskell
+double :: Integer -> Integer
+double n = 2 * n
+```
+
+### Functions can be returned as values from other functions
+
+We define a function `add`that takes two `Integer` arguments and computes their sum:
+
+```haskell
+-- function adding two numbers 
+add :: Integer -> Integer -> Integer
+add x y = x + y
+```
+
+This look quite straightforward. But still there is one interesting detail to note:
+the type signature of `add` is not 
+
+```haskell
+add :: (Integer, Integer) -> Integer
+```
+
+Instead it is:
+
+```haskell
+add :: Integer -> Integer -> Integer
+```
+
+What does this signature actually mean?
+It could be understood to mean "A function taking an Integer argument and returning a function of type `Integer -> Integer`"
+Sounds weird? But that's exactly what Haskell does internally. 
+So if we call `add 2 3` first `add` is applied to `2` which return a new function of type `Integer -> Integer` which is then applied to `3`.
+
+This technique is called [**Currying**](https://wiki.haskell.org/Currying)
+
+Currying is widely used in Haskell as it allows another cool thing: **partial application**.
+
+In the next code snippet we define a function `add5` by partially applying the function `add` to only one argument:
+
+```haskell
+-- partial application: applying add to 5 returns a function of type Integer -> Integer
+add5 :: Integer -> Integer
+add5 = add 5
+```
+
+The trick is as follows: `add 5` returns a function of type `Integer -> Integer` which will add `5` to any Integer argument.
+
+Partial application thus allows us to write functions that return functions as result values.
+
+### Functions can be passed as arguments to other functions
+
+### It's possible to define anonymous functions
 
 Anonymous functions can be defined like this:
 ```Haskell
