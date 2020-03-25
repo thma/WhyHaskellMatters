@@ -96,15 +96,18 @@ I'll try to keep the learning curve moderate and so I'll start with some very ba
 Nevertheless this article is not intended to be an introduction to the Haskell language 
 (have a look at [Learn You a Haskell](http://www.learnyouahaskell.com/) if you are looking for an introduction).
 
-## Functions are first class citizens
+## First-class Functions
 
-Functions are first class citizens means:
+> In computer science, a programming language is said to have first-class functions if it treats functions as 
+> first-class citizens. This means the language supports **passing functions as arguments to other functions**, 
+> **returning them as the values from other functions**, and **assigning them to variables or storing them in data 
+> structures.**[1] Some programming language theorists require **support for anonymous functions** (function literals) 
+> as well.[2] In languages with first-class functions, the names of functions do not have any special status; 
+> they are treated like ordinary variables with a function type.
+> 
+> quoted from [Wikipedia](https://en.wikipedia.org/wiki/First-class_function)
 
-- functions are nothing different from any other value. In particular this means that
-- functions can be used as arguments to other functions, and
-- functions can return functions as their return value.
-
-Let's have a look how this looks like in Haskell:
+Let's have a look how this looks like in Haskell. First we define some basic values:
 
 ```haskell
 -- define constant `aNumber` with a value of 42. 
@@ -128,10 +131,16 @@ square x = x * x
 ```
 
 Definition of a function works exactly in the same way as the definition of any other value.
-The only thing special is that we declare the type to be a *function type* by using the `->` notation.
+The only thing special is that we declare the type to be a **function type** by using the `->` notation.
 So `:: Integer -> Integer` represents a function from `Integer` to `Integer`.
 In the second line we define function `square` to compute `x * x` for any `Integer` argument `x`.
 
+Anonymous functions can be defined like this:
+```Haskell
+-- define a function `square` which takes an Integer as argument and compute its square
+square :: Integer -> Integer
+square = \x -> x * x
+```
 
 
 - Funktionen sind 1st class citizens (higher order functions, Funktionen könen neue Funktionen erzeugen und andere Funktionen als Argumente haben)

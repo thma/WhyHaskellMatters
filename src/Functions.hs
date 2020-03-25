@@ -13,7 +13,46 @@ aString = "Hello World"
 
 -- define a function `square` which takes an Integer as argument and compute its square
 square :: Integer -> Integer
-square x = x * x
+square n = n ^ 2
+
+double :: Integer -> Integer
+double n = 2 * n
+
+ifOddDouble :: Integer -> Integer
+ifOddDouble n =
+  if odd n
+    then double n
+    else n
+
+ifOddSquare :: Integer -> Integer
+ifOddSquare n =
+  if odd n
+    then square n
+    else n
+    
+ifOdd :: (Integer -> Integer) -> Integer -> Integer
+ifOdd growthFunction n =
+  if odd n
+    then growthFunction n
+    else n
+
+ifOddSquare' :: Integer -> Integer
+ifOddSquare' n = ifOdd square n
+
+
+ifPredGrow :: (Integer -> Bool) -> (Integer -> Integer) -> Integer -> Integer
+ifPredGrow predicate growthFunction n = 
+  if predicate n
+    then growthFunction n
+    else n
+
+ifOddDouble' :: Integer -> Integer
+ifOddDouble' n = ifPredGrow odd double n
+
+ifEvenSquare' :: Integer -> Integer
+ifEvenSquare' n = ifPredGrow even square n
+
+
 
 -- function taking a tuple of two Integers and computing their product
 mul :: (Integer, Integer) -> Integer
