@@ -247,7 +247,8 @@ add5 = add 5
 The trick is as follows: `add 5` returns a function of type `Integer -> Integer` which will add `5` to any Integer argument.
 
 Partial application thus allows us to write functions that return functions as result values.
-This technique is frequently used to provide functions with configuration data.
+This technique is frequently used to 
+[provide functions with configuration data](https://github.com/thma/LtuPatternFactory#dependency-injection--parameter-binding-partial-application).
 
 ### Functions can be passed as arguments to other functions
 
