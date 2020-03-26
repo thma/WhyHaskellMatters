@@ -96,7 +96,7 @@ I'll try to keep the learning curve moderate and so I'll start with some very ba
 Even though I'll try to keep the presentation self-contained it's not intended to be an introduction to the Haskell language 
 (have a look at [Learn You a Haskell](http://www.learnyouahaskell.com/) if you are looking for enjoyable tutorial).
 
-## First-class Functions
+## Functions are First-class
 
 > In computer science, a programming language is said to have first-class functions if it treats functions as 
 > first-class citizens. This means the language supports **passing functions as arguments to other functions**, 
@@ -138,14 +138,73 @@ The only thing special is that we declare the type to be a **function type** by 
 So `:: Integer -> Integer` represents a function from `Integer` to `Integer`.
 In the second line we define function `square` to compute `x * x` for any `Integer` argument `x`.
 
-Ok, seems not too difficult, let's define a function `double` that doubles its input value:
+Ok, seems not too difficult, so let's define another function `double` that doubles its input value:
 
 ```haskell
 double :: Integer -> Integer
 double n = 2 * n
 ```
 
+### support for anonymous functions
+
+Anonymous functions, also known as lambda expressions, can be defined in Haskell like this:
+
+```Haskell
+\x -> x * x
+```
+
+This expression denotes an anonymous function that takes a single argument x and returns the square of that argument.
+The backslash is read as λ (the greek letter lambda). 
+
+You can use such as expressions everywhere where you would use any other function. For example you could apply the 
+anonymous function `\x -> x * x` to a number just like the named function `square`:
+
+```haskell
+-- use named function:
+result = square 5
+
+-- use anonymous function:
+result' = (\x -> x * x) 5
+```
+
+We will see more useful applications of anonymous functions in the following section.
+
 ### Functions can be returned as values from other functions
+
+#### function composition
+
+Do you remember *function composition* from your high-school math classes? 
+Function composition is an operation that takes two functions `f` and `g` and produces a function `h` such that 
+`h(x) = g(f(x))`
+The resulting composite function is denoted `h = g ∘ f` where  `(g ∘ f )(x) = g(f(x))`.
+Intuitively, composing functions is a chaining process in which the output of function `f` is used as input of function `g`.
+
+So looking from a programmers perspective the `∘` operator is a function that 
+takes two functions as arguments and returns a new composite function.
+
+In Haskell this operator is represented as the dot operator `.`:
+
+```haskell
+(.) :: (b -> c) -> (a -> b) -> a -> c
+(.) f g = \x -> f (g x)
+```
+
+The brackets around the dot are required as we want to use a non-alphabetical symbol as an identifier.
+In Haskell such identifiers can be used as infix operators (as we will see below).
+Otherwise `(.)` is defined as any other function.
+
+Using this operator we can easily create a composite function that first doubles a number and then computes the square
+of the doubled number:
+
+```haskell
+-- combining functions with the `.` operator: (.) :: (b -> c) -> (a -> b) -> a -> c
+squareAfterDouble :: Integer -> Integer
+squareAfterDouble = square . double
+```
+
+
+
+#### Currying and Partial Application
 
 We define a function `add`that takes two `Integer` arguments and computes their sum:
 
@@ -192,15 +251,12 @@ This technique is frequently used to provide functions with configuration data.
 
 ### Functions can be passed as arguments to other functions
 
-### It's possible to define anonymous functions
 
-Anonymous functions can be defined like this:
-```Haskell
--- define a function `square` which takes an Integer as argument and compute its square
-square :: Integer -> Integer
-square = \x -> x * x
-```
 
+---
+---
+
+This is my scrap book (don't look at it)
 
 - Funktionen sind 1st class citizens (higher order functions, Funktionen könen neue Funktionen erzeugen und andere Funktionen als Argumente haben)
 

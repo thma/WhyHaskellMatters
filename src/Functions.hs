@@ -1,9 +1,10 @@
 module Functions where
 
-import Data.Natural
 import Control.Arrow ((>>>))
+import Data.Natural
+import Prelude hiding ((.))
 
--- define constant `aNumber` with a value of 42. 
+-- define constant `aNumber` with a value of 42.
 aNumber :: Integer
 aNumber = 42
 
@@ -18,6 +19,11 @@ square n = n ^ 2
 double :: Integer -> Integer
 double n = 2 * n
 
+-- combining functions with the `.` operator: (.) :: (b -> c) -> (a -> b) -> a -> c
+squareAfterDouble :: Integer -> Integer
+--squareAfterDouble = square . double
+squareAfterDouble n = (square . double) n
+
 ifOddDouble :: Integer -> Integer
 ifOddDouble n =
   if odd n
@@ -29,7 +35,7 @@ ifOddSquare n =
   if odd n
     then square n
     else n
-    
+
 ifOdd :: (Integer -> Integer) -> Integer -> Integer
 ifOdd growthFunction n =
   if odd n
@@ -39,9 +45,8 @@ ifOdd growthFunction n =
 ifOddSquare' :: Integer -> Integer
 ifOddSquare' n = ifOdd square n
 
-
 ifPredGrow :: (Integer -> Bool) -> (Integer -> Integer) -> Integer -> Integer
-ifPredGrow predicate growthFunction n = 
+ifPredGrow predicate growthFunction n =
   if predicate n
     then growthFunction n
     else n
@@ -52,19 +57,20 @@ ifOddDouble' n = ifPredGrow odd double n
 ifEvenSquare' :: Integer -> Integer
 ifEvenSquare' n = ifPredGrow even square n
 
-
-
 -- function taking a tuple of two Integers and computing their product
 mul :: (Integer, Integer) -> Integer
 mul (x, y) = x * y
 
--- function adding two numbers 
+-- function adding two numbers
 add :: Integer -> Integer -> Integer
 add x y = x + y
 
 -- partial application: applying add to 5 returns a function of type Integer -> Integer
 add5 :: Integer -> Integer
 add5 = add 5
+
+(.) :: (b -> c) -> (a -> b) -> a -> c
+(.) f g x = f (g x)
 
 -- combining functions with the `.` operator: (.) :: (b -> c) -> (a -> b) -> a -> c
 add5AndSquare :: Integer -> Integer
@@ -83,9 +89,9 @@ curMul = curry mul
 uncurAdd :: (Integer, Integer) -> Integer
 uncurAdd = uncurry add
 
--- recursive definition of factorial 
+-- recursive definition of factorial
 factorial :: Natural -> Natural
-factorial n = 
+factorial n =
   if n == 0
     then 1
     else n * factorial (n - 1)
@@ -94,6 +100,3 @@ factorial n =
 fac :: Natural -> Natural
 fac 0 = 1
 fac n = n * fac (n - 1)
-
-
-
