@@ -186,27 +186,27 @@ In Haskell this operator is represented as the dot operator `.`:
 
 ```haskell
 (.) :: (b -> c) -> (a -> b) -> a -> c
-(.) f g = \x -> f (g x)
+(.) f g x = f (g x)
 ```
 
 The brackets around the dot are required as we want to use a non-alphabetical symbol as an identifier.
 In Haskell such identifiers can be used as infix operators (as we will see below).
-Otherwise `(.)` is defined as any other function.
+Otherwise `(.)` is defined as any other function. 
+Please also note how close the syntax is to the original mathematical definition.
 
-Using this operator we can easily create a composite function that first doubles a number and then computes the square
-of the doubled number:
+Using this operator we can easily create a composite function that first doubles 
+a number and then computes the square of that doubled number:
 
 ```haskell
--- combining functions with the `.` operator: (.) :: (b -> c) -> (a -> b) -> a -> c
 squareAfterDouble :: Integer -> Integer
 squareAfterDouble = square . double
 ```
 
-
-
 #### Currying and Partial Application
 
-We define a function `add`that takes two `Integer` arguments and computes their sum:
+In this section we look at another interesting example of functions producing 
+other functions as return values.
+We start by defining a function `add` that takes two `Integer` arguments and computes their sum:
 
 ```haskell
 -- function adding two numbers 
@@ -215,7 +215,7 @@ add x y = x + y
 ```
 
 This look quite straightforward. But still there is one interesting detail to note:
-the type signature of `add` is not 
+the type signature of `add` is not something like 
 
 ```haskell
 add :: (Integer, Integer) -> Integer
@@ -250,6 +250,17 @@ Partial application thus allows us to write functions that return functions as r
 This technique is frequently used to provide functions with configuration data.
 
 ### Functions can be passed as arguments to other functions
+
+I could keep this section short by telling you that we have already seen an example for this:
+the function composition operator `(.)`.
+It **accepts two functions as arguments** and returns a new one as in:
+
+```haskell
+squareAfterDouble :: Integer -> Integer
+squareAfterDouble = square . double
+```
+
+But again I'd like to show you another instructive example.
 
 
 
