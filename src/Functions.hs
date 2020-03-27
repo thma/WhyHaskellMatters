@@ -42,6 +42,9 @@ ifOdd growthFunction n =
     then growthFunction n
     else n
 
+ifOddDouble' :: Integer -> Integer
+ifOddDouble' n = ifOdd double n
+
 ifOddSquare' :: Integer -> Integer
 ifOddSquare' n = ifOdd square n
 
@@ -51,11 +54,18 @@ ifPredGrow predicate growthFunction n =
     then growthFunction n
     else n
 
-ifOddDouble' :: Integer -> Integer
-ifOddDouble' n = ifPredGrow odd double n
+ifEvenDouble :: Integer -> Integer
+ifEvenDouble n = ifPredGrow even double n
 
-ifEvenSquare' :: Integer -> Integer
-ifEvenSquare' n = ifPredGrow even square n
+ifEvenSquare :: Integer -> Integer
+ifEvenSquare n = ifPredGrow even square n
+
+ifOddDouble'' :: Integer -> Integer
+ifOddDouble'' n = ifPredGrow odd double n
+
+ifOddSquare'' :: Integer -> Integer
+ifOddSquare'' n = ifPredGrow odd square n
+
 
 -- function taking a tuple of two Integers and computing their product
 mul :: (Integer, Integer) -> Integer

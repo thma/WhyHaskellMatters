@@ -261,7 +261,131 @@ squareAfterDouble :: Integer -> Integer
 squareAfterDouble = square . double
 ```
 
-But again I'd like to show you another instructive example.
+But I have another instructive example at hand.
+
+Let's imagine we have to implement a function that doubles any odd Integer:
+
+```haskell
+ifOddDouble :: Integer -> Integer
+ifOddDouble n =
+  if odd n
+    then double n
+    else n
+```
+
+The Haskell code is straightforward: new ingredients are the `if ... then ... else ...` and the
+odd `odd` which is a predicate from the Haskell standard library 
+that returns `True` if an integral number is odd.
+
+Now let's assume that we also need another function that computes the square for any odd number.
+As you can imagine we can use the standard library predicate `even`: 
+
+```haskell
+ifOddSquare :: Integer -> Integer
+ifOddSquare n =
+  if odd n
+    then square n
+    else n
+```
+
+As vigilant developers we immediately detect a violation of the 
+[Don't repeat yourself principle](https://en.wikipedia.org/wiki/Don%27t_repeat_yourself) as 
+both functions only vary in the usage of a different growth functions `double` versus `square`.
+
+So we are looking for a way to refactor this code by a solution that keeps the original
+structure but allows to vary the used growth function.
+
+What we need is a function that takes a growth function (of type `(Integer -> Integer)`) 
+as first argument, an `Integer` as second argument
+and returns an `Integer`. The specified growth function will be applied in the `then` clause:
+
+```haskell
+ifOdd :: (Integer -> Integer) -> Integer -> Integer
+ifOdd growthFunction n =
+  if odd n
+    then growthFunction n
+    else n
+```
+
+With this approach we can refactor `ifOddDouble` and `ifOddSquare` as follows:
+
+```haskell
+ifOddDouble :: Integer -> Integer
+ifOddDouble n = ifOdd double n
+
+ifOddSquare :: Integer -> Integer
+ifOddSquare n = ifOdd square n
+```
+
+Now imagine that we have to implement new function `ifEvenDouble` and `ifEvenSquare`, that
+will work only on even numbers. Instead of repeating ourselves we come up with a function
+`ifPredGrow` that takes a predicate function of type `(Integer -> Bool)` as first argument, 
+a growth function of type `(Integer -> Integer)` as second argument and an Integer as third argument, 
+returning an `Integer`.
+
+The predicate function will be used to determine whether the growth function has to be applied:
+
+```haskell
+ifPredGrow :: (Integer -> Bool) -> (Integer -> Integer) -> Integer -> Integer
+ifPredGrow predicate growthFunction n =
+  if predicate n
+    then growthFunction n
+    else n
+```
+
+Using this [higher order function](https://en.wikipedia.org/wiki/Higher-order_function) 
+that even takes two functions as arguments we can write the two new functions and 
+further refactor the existing ones without breaking the DRY principle:
+
+```haskell
+ifEvenDouble :: Integer -> Integer
+ifEvenDouble n = ifPredGrow even double n
+
+ifEvenSquare :: Integer -> Integer
+ifEvenSquare n = ifPredGrow even square n
+
+ifOddDouble'' :: Integer -> Integer
+ifOddDouble'' n = ifPredGrow odd double n
+
+ifOddSquare'' :: Integer -> Integer
+ifOddSquare'' n = ifPredGrow odd square n
+```
+
+## Dealing with Lists
+
+Working with lists or other kinds of collections is a typical business in many problem domains that software developers
+have to deal with.
+
+Support for lists is provided by the Haskell base library and there is also some syntactic sugar built into the
+language that makes working with lists quite a pleasant experience.
+
+Let's start by defining a list containing some Integer numbers:
+
+```haskell 
+someNumbers :: [Integer]
+someNumbers = [49,64,97,54,19,90,934,22,215,6,68,325,720,8082,1,33,31]
+```
+
+The type signature in the first line declares `someNumbers` as a list of Integers. The brackets `[` and `]` around the type `Integer` 
+denote the list type. 
+In the second line we define the actual list value. Again the square brackets are used to form the list.
+
+The bracket notation is syntactic sugar the actual list construction based on an empty list `[]` and the
+concatenation operator `(:)` (which is an infix operator like `(.)` from the previous section).
+
+For example, `[1,2,3]` is syntactic sugar for `1 : 2 : 3 : []`.
+The concatenation operator `(:)` 
+
+
+There is a nice feature called *arithmetic sequences* which allows you to create sequences of numbers quite easily:
+
+```haskell
+upToHundred :: [Integer]
+upToHundred = [1..100]
+
+oddsUpToHundred :: [Integer]
+oddsUpToHundred = [1,3..100]
+```
 
 
 

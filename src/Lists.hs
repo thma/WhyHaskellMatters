@@ -12,6 +12,9 @@ someNumbers = [49,64,97,54,19,90,934,22,215,6,68,325,720,8082,1,33,31]
 upToHundred :: [Integer]
 upToHundred = [1..100]
 
+oddsUpToHundred :: [Integer]
+oddsUpToHundred = [1,3..100]
+
 -- | Extract the first element of a list, which must be non-empty.
 head :: [a] -> a
 head (x:_)  =  x
