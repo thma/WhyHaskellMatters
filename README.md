@@ -416,7 +416,6 @@ A list containing the three numbers 1, 2, 3 is contructed like this:
 Luckily the language designers have been so kind to offer some syntactic sugar for this. So the first list can be
 written as `[1]` and the second as `[1, 2, 3]`.
 
-
 ```haskell
 -- | Extract the first element of a list, which must be non-empty.
 head :: [a] -> a
