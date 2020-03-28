@@ -351,6 +351,39 @@ ifOddSquare'' :: Integer -> Integer
 ifOddSquare'' n = ifPredGrow odd square n
 ```
 
+## Pattern matching (part 1)
+
+With the things that we have learnt so far, we can now start to implement some more interesting functions.
+So what about implementing the recursive [factorial function](https://en.wikipedia.org/wiki/Factorial)?
+
+The factorial function can be defined as follows:
+
+```
+0! = 1
+n! = n * (n-1)!
+for all n ∈ ℕ<sub>0</sub>
+```
+
+With our current knowledge of Haskell we can implement this as follows:
+
+```haskell
+factorial :: Natural -> Natural  -- Natural is a data type representing all non-negative integers
+factorial n =
+  if n == 0
+    then 1
+    else n * factorial (n - 1)
+```
+
+We are using the data type `Natural` to denote the set of non-negative integers 
+
+
+```haskell
+-- definition of factorial using pattern matching
+fac :: Natural -> Natural
+fac 0 = 1
+fac n = n * fac (n - 1)
+```
+
 ## Dealing with Lists
 
 Working with lists or other kinds of collections is a typical business in many problem domains that software developers
