@@ -357,32 +357,40 @@ With the things that we have learnt so far, we can now start to implement some m
 So what about implementing the recursive [factorial function](https://en.wikipedia.org/wiki/Factorial)?
 
 The factorial function can be defined as follows:
-
-```
-0! = 1
-n! = n * (n-1)!
-for all n ∈ ℕ<sub>0</sub>
-```
+ 
+> For all n ∈ ℕ<sub>0</sub>:
+>```
+>0! = 1
+>n! = n * (n-1)!
+>```
 
 With our current knowledge of Haskell we can implement this as follows:
 
 ```haskell
-factorial :: Natural -> Natural  -- Natural is a data type representing all non-negative integers
+factorial :: Natural -> Natural
 factorial n =
   if n == 0
     then 1
     else n * factorial (n - 1)
 ```
 
-We are using the data type `Natural` to denote the set of non-negative integers 
+We are using the Haskell data type `Natural` to denote the set of non-negative integers ℕ<sub>0</sub>.
+Using the literal `factorial` within the definition of the function `factorial` works as expected and denotes a 
+recursive function call.
 
+As these kind of recursive definition of functions are typical for functional programming, the language designers have
+added a useful feature called *pattern matching* that allows to define functions by a set of equations:
 
 ```haskell
--- definition of factorial using pattern matching
 fac :: Natural -> Natural
 fac 0 = 1
 fac n = n * fac (n - 1)
 ```
+
+This style comes much closer to the mathematical definition and is typically more readable, as it helps to avoid
+nested `if ... then ... else ...` constructs.
+
+Pttern matching can not only be used for numeric values but for any other data types. We'll see some more examples shortly.
 
 ## Dealing with Lists
 
@@ -391,6 +399,35 @@ have to deal with.
 
 Support for lists is provided by the Haskell base library and there is also some syntactic sugar built into the
 language that makes working with lists quite a pleasant experience.
+
+A List can either be the empty list (denoted by `[]`) or some element (of any data type) followed by a list.
+So a list containing only a single element `1` is represented by:
+
+```haskell
+1 : []
+```
+
+A list containing the three numbers 1, 2, 3 is contructed like this:
+
+```haskell
+1 : 2 : 3 : []
+```
+
+Luckily the language designers have been so kind to offer some syntactic sugar for this. So the first list can be
+written as `[1]` and the second as `[1, 2, 3]`.
+
+
+```haskell
+-- | Extract the first element of a list, which must be non-empty.
+head :: [a] -> a
+head (x:_)  =  x
+head []     =  error "head: empty list"
+
+-- | Extract the elements after the head of a list, which must be non-empty.
+tail :: [a] -> [a]
+tail (_:xs) =  xs
+tail []     =  error "tail: empty list"
+```
 
 Let's start by defining a list containing some Integer numbers:
 
