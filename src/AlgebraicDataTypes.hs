@@ -6,13 +6,17 @@ import Control.Monad ((>=>))
 -- a simple sum type
 data Status = Green | Yellow | Red deriving (Eq, Show)
 
+data Severity = Low | Middle | High deriving (Eq, Show)
+
+severity :: Status -> Severity
+severity Green  = Low
+severity Yellow = Middle
+severity Red    = High
+
+data StatusSeverityTuple = SST Status Severity  deriving (Eq, Show)
+
 -- a simple product type
 data Pair a b = P a b deriving (Show)
-
-severity :: Status -> Integer
-severity Green  = 0
-severity Yellow = 5
-severity Red    = 10
 
 data Tree a = Leaf a | Node (Tree a) (Tree a) deriving (Show)
 

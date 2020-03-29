@@ -410,24 +410,43 @@ Each of those data constructors is a function (in this simple case a constant) t
 The type `Status` is a so called *sum type* as it is represents the set defined by the sum of all three 
 instances `Green`, `Yellow`, `Red`. In Java this corresponds to Enumerations.
 
-Let's assume we have to create a converter that maps our `Status` values to `Integer` values 
+Let's assume we have to create a converter that maps our `Status` values to `Severity` values 
 representing severity levels in some other system.
 This converter can be written using the pattern matching syntax that we already have seen above:
 
 ```haskell
-severity :: Status -> Integer
-severity Green  = 0
-severity Yellow = 5
-severity Red    = 10
+-- another sum type representing severity:
+data Severity = Low | Middle | High deriving (Eq, Show)
+
+severity :: Status -> Severity
+severity Green  = Low
+severity Yellow = Middle
+severity Red    = High
 ```
 
 The compiler will tell us when we did not cover all instances of the `Status` type 
 (by making use of the `-fwarn-incomplete-patterns` pragma).
 
+Now we look at data types that combine multiple different elements, like pairs n-tuples, etc.
+Let's start with a `Pair` type that combines two different elements:
 ```haskell
 -- a simple product type
-data Pair a b = P a b deriving (Show)
+data Pair a b = P a b
 ```
+
+This can be understood as: data type `Pair` holds two elements of (potentially) different types `a` and `b`; the
+data constructor `P` takes a value of type `a` and a value of type `b` and returns a `Pair a b` instance.
+
+So a `P "Haskell" Green` returns a `Pair String Status` instance 
+(the data constructor `P`  has the signature `P :: a -> b -> Pair a b`). 
+
+These kind
+
+We see that data type definitions may work with type variables. This is somewhat similar to *generics* in languages like 
+Java and C++ but much more sophisticated.
+
+
+
 
 ## Dealing with Lists
 
@@ -446,8 +465,6 @@ This intuition is reflected in the following data type definition:
 data  [a]  =  [] | a : [a] 
 ```
 
-We see that data type definitions may work with type variables. This is somewhat similar to *generics* in languages like 
-Java and C++ but much more sophisticated.
 
 The cons operator `(:)` (which is an infix operator like `(.)` from the previous section) is declared as a 
 *data constructor* to construct a list from a single element of type `a` and a list of type `a`.
