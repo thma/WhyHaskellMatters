@@ -390,7 +390,8 @@ fac n = n * fac (n - 1)
 This style comes much closer to the mathematical definition and is typically more readable, as it helps to avoid
 nested `if ... then ... else ...` constructs.
 
-Pttern matching can not only be used for numeric values but for any other data types. We'll see some more examples shortly.
+Pattern matching can not only be used for numeric values but for any other data types. 
+We'll see some more examples shortly.
 
 ## Dealing with Lists
 
@@ -400,14 +401,28 @@ have to deal with.
 Support for lists is provided by the Haskell base library and there is also some syntactic sugar built into the
 language that makes working with lists quite a pleasant experience.
 
-A List can either be the empty list (denoted by `[]`) or some element (of any data type) followed by a list.
-So a list containing only a single element `1` is represented by:
+A list can either be the empty list (denoted by `[]`) 
+or some element (of a data type `a`) followed by a list with elements of type `a`.
+
+This intuition is reflected in the following data type definition:
+
+```haskell
+data  [a]  =  [] | a : [a] 
+```
+
+We see that data type definitions may work with type variables. This is somewhat similar to *generics* in languages like 
+Java and C++ but much more sophisticated.
+
+The cons operator `(:)` (which is an infix operator like `(.)` from the previous section) is declared as a 
+*data constructor* to construct a list from a single element of type `a` and a list of type `a`.
+
+So a list containing only a single element `1` is constructed by:
 
 ```haskell
 1 : []
 ```
 
-A list containing the three numbers 1, 2, 3 is contructed like this:
+A list containing the three numbers 1, 2, 3 is constructed like this:
 
 ```haskell
 1 : 2 : 3 : []
@@ -415,6 +430,16 @@ A list containing the three numbers 1, 2, 3 is contructed like this:
 
 Luckily the language designers have been so kind to offer some syntactic sugar for this. So the first list can be
 written as `[1]` and the second as `[1, 2, 3]`.
+
+With this knowledge we can define a sample list of Integers:
+
+```haskell 
+someNumbers :: [Integer]
+someNumbers = [49,64,97,54,19,90,934,22,215,6,68,325,720,8082,1,33,31]
+```
+
+Function that work on lists will use the recursive type definition for pattern matching.
+For example, the function `head` will return the first element of a list.
 
 ```haskell
 -- | Extract the first element of a list, which must be non-empty.
@@ -428,12 +453,21 @@ tail (_:xs) =  xs
 tail []     =  error "tail: empty list"
 ```
 
+```haskell
+filter :: (a -> Bool) -> [a] -> [a]
+filter _pred []    = []
+filter pred (x:xs)
+  | pred x         = x : filter pred xs
+  | otherwise      = filter pred xs
+
+```
+
+
+
+
+
 Let's start by defining a list containing some Integer numbers:
 
-```haskell 
-someNumbers :: [Integer]
-someNumbers = [49,64,97,54,19,90,934,22,215,6,68,325,720,8082,1,33,31]
-```
 
 The type signature in the first line declares `someNumbers` as a list of Integers. The brackets `[` and `]` around the type `Integer` 
 denote the list type. 
