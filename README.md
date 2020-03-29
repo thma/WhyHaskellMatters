@@ -393,6 +393,42 @@ nested `if ... then ... else ...` constructs.
 Pattern matching can not only be used for numeric values but for any other data types. 
 We'll see some more examples shortly.
 
+## Algebraic Data Types
+
+Haskell supports user-defined data types by making use of a very thought out concept.
+Let's start with a simple example:
+
+```haskell
+data Status = Green | Yellow | Red
+```
+
+This declares a data type `Status` which has exactly three different instances. For each instance a
+*data constructor* is defined that allows to create a new instance of the data type.
+
+Each of those data constructors is a function (in this simple case a constant) that returns a `Status` instance.
+
+The type `Status` is a so called *sum type* as it is represents the set defined by the sum of all three 
+instances `Green`, `Yellow`, `Red`. In Java this corresponds to Enumerations.
+
+Let's assume we have to create a converter that maps our `Status` values to `Integer` values 
+representing severity levels in some other system.
+This converter can be written using the pattern matching syntax that we already have seen above:
+
+```haskell
+severity :: Status -> Integer
+severity Green  = 0
+severity Yellow = 5
+severity Red    = 10
+```
+
+The compiler will tell us when we did not cover all instances of the `Status` type 
+(by making use of the `-fwarn-incomplete-patterns` pragma).
+
+```haskell
+-- a simple product type
+data Pair a b = P a b deriving (Show)
+```
+
 ## Dealing with Lists
 
 Working with lists or other kinds of collections is a typical business in many problem domains that software developers
@@ -581,3 +617,4 @@ Damit lässt sich Seiteneffektfreie Programmierung realisieren ("Purity")
      
 - Testbarkeit
     - TDD, higher order functions assembly, Typklassen dispatch (https://jproyo.github.io/posts/2019-03-17-tagless-final-haskell.html)
+    

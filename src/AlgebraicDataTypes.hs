@@ -1,3 +1,4 @@
+{-# OPTIONS_GHC -fwarn-incomplete-patterns #-} -- ensure that all possible instances are covered in pattern matching
 module AlgebraicDataTypes where
 
 import Control.Monad ((>=>))
@@ -7,6 +8,11 @@ data Status = Green | Yellow | Red deriving (Eq, Show)
 
 -- a simple product type
 data Pair a b = P a b deriving (Show)
+
+severity :: Status -> Integer
+severity Green  = 0
+severity Yellow = 5
+severity Red    = 10
 
 data Tree a = Leaf a | Node (Tree a) (Tree a) deriving (Show)
 
