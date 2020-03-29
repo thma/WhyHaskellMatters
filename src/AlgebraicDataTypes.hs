@@ -16,7 +16,7 @@ severity Red    = High
 data StatusSeverityTuple = SST Status Severity  deriving (Eq, Show)
 
 -- a simple product type
-data Pair a b = P a b deriving (Show)
+data Pair = P Status Severity deriving (Show)
 
 data Tree a = Leaf a | Node (Tree a) (Tree a) deriving (Show)
 

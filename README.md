@@ -429,6 +429,39 @@ The compiler will tell us when we did not cover all instances of the `Status` ty
 
 Now we look at data types that combine multiple different elements, like pairs n-tuples, etc.
 Let's start with a `Pair` type that combines two different elements:
+
+```haskell
+-- a simple product type
+data Pair = P Status Severity
+```
+
+This can be understood as: data type `Pair` can be constructed from a
+data constructor `P` takes a value of type `Status` and a value of type `Severity` and returns a `Pair` instance.
+
+So for example `P Green High` returns a `Pair` instance
+(the data constructor `P`  has the signature `P :: Status -> Severity -> Pair`).
+
+The type `Pair` can be interpreted as the set of all possible ordered pairs of Status and Severity values, 
+that is the cartesian product of `Status` and `Severity`.
+
+That's why such a data type is called *product type*. 
+
+Haskell allows you to create arbitrary data types by combining *sum types* and *product types*. The complete
+range of data types that can be constructed in this way is called 
+[*algebraic data types*](https://en.wikipedia.org/wiki/Algebraic_data_type) or ADT in short.
+
+Using algebraic data types has several advantages:
+
+- Pattern matching can be used to analyze any concrete instance to chose different behaviour based on data.
+  as in the example that maps `Status` to `Severity` there is no need to use `if..then..else..` constructs.
+- The compiler can detect incomplete patterns matching or other flaws.
+- The compiler can derive many complex functionality automatically for ADTs as they are constructed in
+  such a regular way.
+  
+We will cover the interesting combination of ADTs and pattern matching in the following sections.  
+  
+## Polymorphic Data Types
+
 ```haskell
 -- a simple product type
 data Pair a b = P a b
