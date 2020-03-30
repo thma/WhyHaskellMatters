@@ -1,12 +1,39 @@
 # Why Haskell Matters
 
-This is an early draft work in progress article.
+This is an early draft of  a work in progress article.
+
+> Haskell doesn't solve different problems than other languages.
+> But it solves them differently.
+> 
+> -- unknown
+
+## Abstract
+
+In this article I'm presenting some of the most important and distinguishing features of the Haskell
+programming language.
+
+The target audience are developers with a background in OO languages who are eager
+to learn about concepts of functional programming and Haskell in particular.
+
+The presentation aims to be self-contained and does not require any previous knowledge of the language.
+Nevertheless this article is not meant to be a full introduction to the language.
+
+(If you looking for an enjoyable tutorial have a look at [Learn You a Haskell](http://www.learnyouahaskell.com/.)
 
 
-## Motivation
+## Table of contents
+
+- [Introduction](#introduction)
+- [Functions are first class](#functions-are-first-class)
+- [Pattern matching (part 1)](#pattern-matching-part-1)
+- [Algebraic Data Types](#algebraic-data-types)
+- [Polymorphic Data Types](#polymorphic-data-types)
+
+## Introduction
 
 Haskell was started as an academic research language in the late 1980ies.
-It was never one of the most popular languages in the software industry.
+It was never one of the most popular languages in the software industry and never 
+reached "mainstream" status.
 
 So why should we concern ourselves with it?
 
@@ -19,34 +46,37 @@ In a talk in 2017 on [the Haskell journey](https://www.youtube.com/watch?v=re96U
 since its beginnings in the 1980ies Simon Peyton Jones speaks about the
 rather unusual life story of Haskell.
 
-First he shows a chart representing the typical life cycle of research languages. They are often created by 
+First he talks about the typical life cycle of research languages. They are often created by 
 a single researcher (who is also the single user) and most of them will be abandoned 
-after just a few years:
+after just a few years.
 
+<!--
 ![most research languages](img/language-1.png)
+-->
+A more successful research language might gain some interest in a larger community 
+but will still not escape the ivory tower and typically will be given up within ten years.
 
-A more successful research language gains some interest in a larger community 
-but will still not escape the ivory tower and typically will die within ten years:
-
+<!--
 ![successful research languages](img/language-2.png) 
-
-On the other hand we have popular programming languages that are quickly adopted by 
+-->
+On the other hand we have all those popular programming languages that are quickly adopted by 
 large numbers of users and thus reach "the threshold of immortality".
 That is the base of existing code will grow so large that the language will 
 be in use for decades:
-
+<!--
 ![successful research languages](img/language-3.png) 
+-->
+A little jokingly he then depicts the sad fate of languages designed by 
+committees by flat line through zero: They simply never take off.
 
-In the next chart he rather jokingly depicts the sad fate of languages designed by committees.
-They simply never take off:
-
+<!--
 ![commitee languages](img/language-4.png) 
-
+-->
 Finally he presents a chart showing the Haskell timeline:
 
 ![commitee languages](img/language-5.png)
 
-The development shown in this chart is rather unexpected and unusual: 
+The development shown in this chart seems rather unexpected: 
 Haskell started as a research language and was even
 designed by a committee; 
 so in all probability it should have been abandoned long before the millennium!
@@ -64,7 +94,7 @@ In statics that rank programming languages by actual usage Haskell is typically 
 But in statistics that instead rank programming languages by the volume of discussions on the internet
 Haskell typically scores much better (often in the top ten).
 
-## So why does Haskell keep to be such a hot topic in the software development community?
+### So why does Haskell keep to be such a hot topic in the software development community?
 
 A very short answer might be: 
 Haskell has a number of features that are clearly different from those of most other programming languages. 
@@ -81,20 +111,7 @@ A further essential point is that Haskell is still an experimental laboratory fo
 compiler construction, programming language design, theorem-provers, type systems etc.
 So inevitably Haskell will be a topic in the discussion about these approaches.
 
-In the next section we want to study some of the most distinguishing features of Haskell.
-
-# So what exactly are those magic powers of Haskell?
-
-> Haskell doesn't solve different problems than other languages.
-> But it solves them differently.
-> 
-> -- unknown
-
-In this section we will examine the most outstanding features of the Haskell language.
-I'll try to keep the learning curve moderate and so I'll start with some very basic concepts.
-
-Even though I'll try to keep the presentation self-contained it's not intended to be an introduction to the Haskell language 
-(have a look at [Learn You a Haskell](http://www.learnyouahaskell.com/) if you are looking for enjoyable tutorial).
+In the following sections we will study some of the most distinguishing features of Haskell.
 
 ## Functions are First-class
 
@@ -428,21 +445,20 @@ The compiler will tell us when we did not cover all instances of the `Status` ty
 (by making use of the `-fwarn-incomplete-patterns` pragma).
 
 Now we look at data types that combine multiple different elements, like pairs n-tuples, etc.
-Let's start with a `Pair` type that combines two different elements:
+Let's start with a `PairStatusSeverity` type that combines two different elements:
 
 ```haskell
--- a simple product type
-data Pair = P Status Severity
+data PairStatusSeverity = P Status Severity
 ```
 
-This can be understood as: data type `Pair` can be constructed from a
-data constructor `P` takes a value of type `Status` and a value of type `Severity` and returns a `Pair` instance.
+This can be understood as: data type `PairStatusSeverity` can be constructed from a
+data constructor `P` that takes a value of type `Status` and a value of type `Severity` and returns a `Pair` instance.
 
-So for example `P Green High` returns a `Pair` instance
-(the data constructor `P`  has the signature `P :: Status -> Severity -> Pair`).
+So for example `P Green High` returns a `PairStatusSeverity` instance
+(the data constructor `P`  has the signature `P :: Status -> Severity -> PairStatusSeverity`).
 
-The type `Pair` can be interpreted as the set of all possible ordered pairs of Status and Severity values, 
-that is the cartesian product of `Status` and `Severity`.
+The type `PairStatusSeverity` can be interpreted as the set of all possible ordered pairs of Status and Severity values, 
+that is the *cartesian product* of `Status` and `Severity`.
 
 That's why such a data type is called *product type*. 
 
@@ -452,7 +468,7 @@ range of data types that can be constructed in this way is called
 
 Using algebraic data types has several advantages:
 
-- Pattern matching can be used to analyze any concrete instance to chose different behaviour based on data.
+- Pattern matching can be used to analyze any concrete instance to select different behaviour based on input data.
   as in the example that maps `Status` to `Severity` there is no need to use `if..then..else..` constructs.
 - The compiler can detect incomplete patterns matching or other flaws.
 - The compiler can derive many complex functionality automatically for ADTs as they are constructed in
@@ -462,21 +478,43 @@ We will cover the interesting combination of ADTs and pattern matching in the fo
   
 ## Polymorphic Data Types
 
+Forming pairs or more generally n-tuples is a very common task in programming. 
+Therefore it would be inconvenient and repetitive if we were forced to create new Pair or Tuple types
+for each concrete usage. consider the following example:
+
 ```haskell
--- a simple product type
+data PairStatusSeverity = P Status Severity
+
+data PairStatusString   = P' Status String
+
+data PairSeverityStatus = P'' Severity Status
+```
+
+Luckily data type declarations allow to use type variables to avoid this kind of cluttered code.
+So we can define a generic data type `Pair` that allows us to freely combine different kinds of arguments:
+
+```haskell
+-- a simple polymorphic type
 data Pair a b = P a b
 ```
 
-This can be understood as: data type `Pair` holds two elements of (potentially) different types `a` and `b`; the
-data constructor `P` takes a value of type `a` and a value of type `b` and returns a `Pair a b` instance.
+This can be understood as: data type `Pair` uses two elements of (potentially) different types `a` and `b`; the
+data constructor `P` takes a value of type `a` and a value of type `b` and returns a `Pair a b` instance 
+(the data constructor `P`  has the signature `P :: a -> b -> Pair a b`).
+The type `Pair` can now be used to create many different concrete data types it is thus 
+called a *polymorphic* data type.
 
-So a `P "Haskell" Green` returns a `Pair String Status` instance 
-(the data constructor `P`  has the signature `P :: a -> b -> Pair a b`). 
+As pairs and n-tuples are so frequently used, the Haskell language designers have added some syntactic sugar to
+work effortlessly with them.
 
-These kind
+So you can simply write tuples like this:
 
-We see that data type definitions may work with type variables. This is somewhat similar to *generics* in languages like 
-Java and C++ but much more sophisticated.
+```haskell
+tuple :: (Status, Severity, String)
+tuple = (Green, Low, "All green")
+```
+
+
 
 
 
