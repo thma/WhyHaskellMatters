@@ -15,6 +15,7 @@ upToHundred = [1..100]
 oddsUpToHundred :: [Integer]
 oddsUpToHundred = [1,3..100]
 
+length
 
 -- | Extract the first element of a list, which must be non-empty.
 head :: [a] -> a

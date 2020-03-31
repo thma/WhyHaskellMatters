@@ -514,31 +514,21 @@ tuple :: (Status, Severity, String)
 tuple = (Green, Low, "All green")
 ```
 
+### Lists
 
+Another very useful polymorphic type is the the `List`.
 
-
-
-
-## Dealing with Lists
-
-Working with lists or other kinds of collections is a typical business in many problem domains that software developers
-have to deal with.
-
-Support for lists is provided by the Haskell base library and there is also some syntactic sugar built into the
-language that makes working with lists quite a pleasant experience.
-
-A list can either be the empty list (denoted by `[]`) 
-or some element (of a data type `a`) followed by a list with elements of type `a`.
+A list can either be the empty list (denoted by the data constructor `[]`) 
+or some element (of a data type `a`) followed by a list with elements of type `a`, denoted by `[a]`.
 
 This intuition is reflected in the following data type definition:
 
 ```haskell
-data  [a]  =  [] | a : [a] 
+data [a] = [] | a : [a]  deriving (Eq, Ord)
 ```
 
-
 The cons operator `(:)` (which is an infix operator like `(.)` from the previous section) is declared as a 
-*data constructor* to construct a list from a single element of type `a` and a list of type `a`.
+*data constructor* to construct a list from a single element of type `a` and a list of type `[a]`.
 
 So a list containing only a single element `1` is constructed by:
 
@@ -554,6 +544,21 @@ A list containing the three numbers 1, 2, 3 is constructed like this:
 
 Luckily the language designers have been so kind to offer some syntactic sugar for this. So the first list can be
 written as `[1]` and the second as `[1, 2, 3]`.
+
+Function that work on lists can use pattern matching to select behaviour for the `[]` and the `a:[a]` case.
+
+Take for instance the definition of the function `length` that computes the length of a list:
+
+```haskell
+length :: [a] -> Integer
+length []     =  0
+length (x:xs) =  1 + length xs
+```
+
+We can read these equations as: The length of the empty list is 0, 
+and the length of a list whose first element is x and remainder is xs 
+is 1 plus the length of xs.
+
 
 With this knowledge we can define a sample list of Integers:
 
