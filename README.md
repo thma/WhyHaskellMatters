@@ -28,6 +28,7 @@ Nevertheless this article is not meant to be a full introduction to the language
 - [Pattern matching (part 1)](#pattern-matching-part-1)
 - [Algebraic Data Types](#algebraic-data-types)
 - [Polymorphic Data Types](#polymorphic-data-types)
+- [Declarative programming](#declarative-programming)
 
 ## Introduction
 
@@ -524,7 +525,7 @@ or some element (of a data type `a`) followed by a list with elements of type `a
 This intuition is reflected in the following data type definition:
 
 ```haskell
-data [a] = [] | a : [a]  deriving (Eq, Ord)
+data [a] = [] | a : [a]
 ```
 
 The cons operator `(:)` (which is an infix operator like `(.)` from the previous section) is declared as a 
@@ -542,8 +543,14 @@ A list containing the three numbers 1, 2, 3 is constructed like this:
 1 : 2 : 3 : []
 ```
 
-Luckily the language designers have been so kind to offer some syntactic sugar for this. So the first list can be
-written as `[1]` and the second as `[1, 2, 3]`.
+Luckily the Haskell language designers have been so kind to offer some syntactic sugar for this. 
+So the first list can simply be written as `[1]` and the second as `[1,2,3]`.
+
+Polymorphic type expressions describe *families of types*. 
+For example, `(forall a)[a]` is the family of types consisting of, 
+for every type `a`, the type of lists of `a`. 
+Lists of integers (e.g. `[1,2,3]`), lists of characters (`['a','b','c']`), 
+even lists of lists of integers, etc., are all members of this family. 
 
 Function that work on lists can use pattern matching to select behaviour for the `[]` and the `a:[a]` case.
 
@@ -560,65 +567,165 @@ and the length of a list whose first element is x and remainder is xs
 is 1 plus the length of xs.
 
 
-With this knowledge we can define a sample list of Integers:
-
-```haskell 
+In our next example we want to work with a of some random integers:
+```haskell
 someNumbers :: [Integer]
 someNumbers = [49,64,97,54,19,90,934,22,215,6,68,325,720,8082,1,33,31]
 ```
 
-Function that work on lists will use the recursive type definition for pattern matching.
-For example, the function `head` will return the first element of a list.
-
-```haskell
--- | Extract the first element of a list, which must be non-empty.
-head :: [a] -> a
-head (x:_)  =  x
-head []     =  error "head: empty list"
-
--- | Extract the elements after the head of a list, which must be non-empty.
-tail :: [a] -> [a]
-tail (_:xs) =  xs
-tail []     =  error "tail: empty list"
-```
+Now we want to select all even or all odd numbers from this list. 
+We are looking for a function `filter` that takes two
+arguments: first a predicate function that will be used to check each element
+and second the actual list of elements. The function will return a list with all matching elements.
+And of course our solution should work not only for Integers but for any other types as well.
+Here is the type signature of such a filter function:
 
 ```haskell
 filter :: (a -> Bool) -> [a] -> [a]
-filter _pred []    = []
+```
+
+In the implementation we will use pattern matching to provide different behaviour for the `[]` and the `(x:xs)` case:
+
+```haskell
+filter :: (a -> Bool) -> [a] -> [a]
+filter pred []     = []
 filter pred (x:xs)
   | pred x         = x : filter pred xs
   | otherwise      = filter pred xs
-
 ```
 
+I think the `[]` case is obvious.
 
+To understand the `(x:xs)` case we have to know that in addition to simple matching of the type constructors
+we can also use *pattern guards* to perform additional testing on the input data.
+In this case we compute `pred x` if it evaluates to `True`, `x` is a match and will be cons'ed with the result of 
+`filter pred xs`.
+If it does not evaluate to `True`, 
+we will not add `x` to the result list and thus simply call filter recursively on the remainder of the list.
 
-
-
-Let's start by defining a list containing some Integer numbers:
-
-
-The type signature in the first line declares `someNumbers` as a list of Integers. The brackets `[` and `]` around the type `Integer` 
-denote the list type. 
-In the second line we define the actual list value. Again the square brackets are used to form the list.
-
-The bracket notation is syntactic sugar the actual list construction based on an empty list `[]` and the
-concatenation operator `(:)` (which is an infix operator like `(.)` from the previous section).
-
-For example, `[1,2,3]` is syntactic sugar for `1 : 2 : 3 : []`.
-The concatenation operator `(:)` 
-
-
-There is a nice feature called *arithmetic sequences* which allows you to create sequences of numbers quite easily:
+Now we can use `filter` to select elements from our sample list:
 
 ```haskell
-upToHundred :: [Integer]
-upToHundred = [1..100]
+someEvenNumbers :: [Integer]
+someEvenNumbers = filter even someNumbers
 
-oddsUpToHundred :: [Integer]
-oddsUpToHundred = [1,3..100]
+-- predicates may also be lambda-expresssions
+someOddNumbers :: [Integer]
+someOddNumbers = filter (\n -> n `rem` 2 /= 0) someNumbers  
 ```
 
+Of course we don't have to invent functions like `filter` on our own but can rely on the [extensive set of 
+predefined functions working on lists](https://hackage.haskell.org/package/base-4.12.0.0/docs/Data-List.html) 
+in the Haskell base library.
+
+## Declarative programming
+
+In this section I want to explain how programming with *higher order* functions can be used to
+factor out many basic control structures and algorithms from the user code.
+
+This will result in a more *declarative programming* style where the developer can simply 
+declare *what* she wants to achieve but is not required to write down *how* it is to be achieved.
+
+Code that applies this style will be much denser and it will be more concerned with the actual elements
+of the problem domain than with the technical implementation details.
+
+We'll demonstrate this with some examples working on lists. 
+First we get the task to write a function that doubles all elements of a `[Integer]` list.
+We want to reuse the `double` function we have already defined above.
+
+With all that we have learnt so far writing a function `doubleAll` isn't that hard:
+
+```haskell
+-- compute the double value for all list elements
+doubleAll :: [Integer] -> [Integer]
+doubleAll [] = []
+doubleAll (n:rest) = double n : doubleAll rest
+```
+
+Next we are asked to implement a similar function `squareAll` that will use `square` to compute the square of all elements in a list.
+The naive way would be to implement it in the *WET* (We Enjoy Typing) approach:
+
+```haskell
+-- compute squares for all list elements
+squareAll :: [Integer] -> [Integer]
+squareAll [] = []
+squareAll (n:rest) = square n : squareAll rest
+```
+
+Of course this is very ugly: 
+both function use the same pattern matching and apply the same recursive iteration strategy.
+They only differ in the function applied to each element.
+
+As role model developers we don't want to repeat ourselves.  We are thus looking for something that 
+captures the essence of mapping a given function over a list of elements:
+
+```haskell
+map :: (a -> b) -> [a] -> [b]
+map f []     = []
+map f (x:xs) = f x : map f xs
+```
+
+This function abstracts away the implementation details of iterating over a list and allows to provide a user defined 
+mapping function as well.
+
+Now we can use `map` to simply *declare our intention* (the 'what') and don't have to detail the 'how':
+
+```haskell
+doubleAll' :: [Integer] -> [Integer]
+doubleAll' = map double
+
+squareAll' :: [Integer] -> [Integer]
+squareAll' = map square
+```
+
+### folding and reducing
+
+Now let's have a look at some related problem.
+Our first task is to add up all elements of a  `[Integer]` list.
+First the naive approach which uses the already familiar mix of pattern matching plus recursion:
+
+```haskell
+sumUp :: [Integer] -> Integer
+sumUp [] = 0
+sumUp (n:rest) = n + sumUp rest
+```
+
+By looking at the code for a function that computes the product of all elements of a  `[Integer]` list we can again see that
+we are repeating ourselves:
+
+```haskell
+prod :: [Integer] -> Integer
+prod [] = 1
+prod (n:rest) = n * prod rest
+```
+
+So what is the essence of both algorithms?
+At the core of both algorithms we have a recursive function which 
+
+- takes a binary operator (`(+)`or `(*)` in our case), 
+- an initial value that is used as a starting point for the accumulation 
+  (typically the identity element (or neutral element) of the binary operator), 
+- the list of elements that should be reduced to a single return value
+- performs the accumulation by recursively applying the binary operator to all elements of the list until the `[]` is reached,
+  where the neutral element is returned.
+
+This essence is contained in the higher order function `foldr` which again is part of the Haskell standard library:
+
+```haskell
+foldr :: (a -> b -> b) -> b -> [a] -> b
+foldr f acc []     =  acc
+foldr f acc (x:xs) =  f x (foldr f acc xs)
+```
+
+Now we can use `foldr` to simply *declare our intention* (the 'what') and don't have to detail the 'how':
+
+```haskell
+sumUp' :: [Integer] -> Integer
+sumUp' = foldr (+) 0
+
+prod' :: [Integer] -> Integer
+prod' = foldr (*) 1
+```
 
 
 ---

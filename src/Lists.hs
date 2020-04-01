@@ -1,8 +1,8 @@
 module Lists where
 
-import Prelude hiding (map, foldr)
+import Prelude hiding (map, foldr, length, filter)
 import qualified Prelude as P (foldr)
-import Functions (square)
+import Functions (square, double)
 
 -- a list of numbers to play around with
 someNumbers :: [Integer]
@@ -15,28 +15,33 @@ upToHundred = [1..100]
 oddsUpToHundred :: [Integer]
 oddsUpToHundred = [1,3..100]
 
-length
+length :: [a] -> Integer
+length []     =  0
+length (x:xs) =  1 + length xs
 
--- | Extract the first element of a list, which must be non-empty.
-head :: [a] -> a
-head (x:_)  =  x
-head []     =  error "head: empty list"
+filter :: (a -> Bool) -> [a] -> [a]
+filter _pred []    = []
+filter pred (x:xs)
+  | pred x         = x : filter pred xs
+  | otherwise      = filter pred xs
+  
+-- filtering lists
 
--- | Extract the elements after the head of a list, which must be non-empty.
-tail :: [a] -> [a]
-tail (_:xs) =  xs
-tail []     =  error "tail: empty list"
+someEvenNumbers :: [Integer]
+someEvenNumbers = filter even someNumbers
 
+someOddNumbers :: [Integer]
+someOddNumbers = filter (\n -> n `rem` 2 /= 0) someNumbers  
 
 -- compute squares for all list elements
 squareAll :: [Integer] -> [Integer]
 squareAll [] = []
 squareAll (n:rest) = square n : squareAll rest
 
--- compute triples for all list elements
-tripleAll :: [Integer] -> [Integer]
-tripleAll [] = []
-tripleAll (n:rest) = (\i -> i*i*i) n : tripleAll rest
+-- compute the double value for all list elements
+doubleAll :: [Integer] -> [Integer]
+doubleAll [] = []
+doubleAll (n:rest) = double n : doubleAll rest
 
 -- We don't want to repeat ourselves so we want something that captures the essence of mapping a function over a list:
 map :: (a -> b) -> [a] -> [b]
@@ -84,12 +89,6 @@ prod' = foldr (*) 1
 foldMap :: (Monoid m) => (a -> m) -> [a] -> m
 foldMap f = foldr (mappend . f) mempty
 
--- filtering lists
--- filter :: (a -> Bool) -> [a] -> [a]
-someEvenNumbers :: [Integer]
-someEvenNumbers = filter even someNumbers
 
-someOddNumbers :: [Integer]
-someOddNumbers = filter (\n -> n `rem` 2 /= 0) someNumbers
 
 
