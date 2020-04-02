@@ -10,7 +10,7 @@ viciousCircle = viciousCircle
 test = (4 == 4) || viciousCircle
 
 
--- list comprehension
+-- arithmetic sequences
 -- all natural numbers
 naturalNumbers = [0..]
 
