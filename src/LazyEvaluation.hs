@@ -45,9 +45,3 @@ cond :: [(Bool, a)] -> [a]
 cond []                 = []
 cond ((True,  v):rest)  = v : cond rest
 cond ((False, _):rest)  = cond rest
-    
-    
-    
-
-
-
