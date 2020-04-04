@@ -12,11 +12,12 @@ This is an early draft of  a work in progress article.
 In this article I'm presenting some of the most important and distinguishing features of the Haskell
 programming language.
 
-The target audience are developers with a background in OO languages who are eager
+The target audience are developers with a background in non-functional languages who are eager
 to learn about concepts of functional programming and Haskell in particular.
 
 The presentation aims to be self-contained and does not require any previous knowledge of the language.
-Nevertheless this article is not meant to be a full introduction to the language.
+I will also try to keep the learning curve moderate and to limit the scope of the presentation;
+nevertheless this article is not meant to be a full introduction to the language.
 
 (If you looking for an enjoyable tutorial have a look at [Learn You a Haskell](http://www.learnyouahaskell.com/.)
 
@@ -34,13 +35,13 @@ Nevertheless this article is not meant to be a full introduction to the language
 ## Introduction
 
 Exactly thirty years ago, on April 1st 1990, the original Haskell language report was published
-by a small group of academic researches in the field of non-strict functional programming.
+by a small group of academic researchers in the field of non-strict functional programming.
 
-Haskell never became one of the most popular languages in the software industry and never 
-became "mainstream" but it has been and still is quite influential in the software development community.
+Haskell never became one of the most popular languages in the software industry or part of the mainstream 
+but it has been and still is quite influential in the software development community.
 
-In this article I want to explain why Haskell is still such an important language by presenting some
-of its most distinguishing features with working code examples.
+In this article I want to explain why Haskell keeps to be such an important language by presenting some
+of its most distinguishing features and detailing them with working code examples.
 
 But before diving directly into the technical details I'd like to first have a closer look on the reception of 
 Haskell in the software developers community:
@@ -89,7 +90,7 @@ Haskell typically scores much better (often in the top ten).
 
 ### So why does Haskell keep to be a hot topic in the software development community?
 
-A very short answer might be: 
+A very *short answer* might be: 
 Haskell has a number of features that are clearly different from those of most other programming languages. 
 Many of these features have proven to be powerful tools to solve basic problems of software development elegantly.
 
@@ -104,7 +105,8 @@ A further essential point is that Haskell is still an experimental laboratory fo
 compiler construction, programming language design, theorem-provers, type systems etc.
 So inevitably Haskell will be a topic in the discussion about these approaches.
 
-In the following sections we will study some of the most distinguishing features of Haskell.
+In the following sections we will try to find the *longer answer* by
+studying some of the most distinguishing features of Haskell.
 
 ## Functions are First-class
 
@@ -586,9 +588,7 @@ filter pred (x:xs)
   | otherwise      = filter pred xs
 ```
 
-I think the `[]` case is obvious.
-
-To understand the `(x:xs)` case we have to know that in addition to simple matching of the type constructors
+The `[]` case is obvious. To understand the `(x:xs)` case we have to know that in addition to simple matching of the type constructors
 we can also use *pattern guards* to perform additional testing on the input data.
 In this case we compute `pred x` if it evaluates to `True`, `x` is a match and will be cons'ed with the result of 
 `filter pred xs`.
@@ -730,17 +730,67 @@ I won't go into details here as it would go beyond the scope of this article. Bu
 
 ## Non-strict Evaluation
 
-Now we come to topic that was one of the main drivers behind the original Haskell community: they wanted to get
+Now we come to topic that was one of the main drivers for the Haskell designers: they wanted to get
 away from the then standard model of strict evaluation.
+
+Non-Strict Evaluation (aka. normal order reduction) has one very important property. 
+ 
+> If a lambda expression has a normal form, then normal order reduction will terminate and find that normal form.
+>
+> Church-Rosser Theorem II
+
+This property does not hold true for other reduction strategies (like applicative order or call-by-value reduction).
+
+This result from mathematical research on the [lambda calculus](https://en.wikipedia.org/wiki/Lambda_calculus) 
+is important as Haskell maintains the semantics of normal order reduction.
+
+The real-world benefits of lazy evaluation include:
+
+- Avoid endless loops in certain edge cases
+- The ability to define control flow (structures) as abstractions instead of primitives.
+- The ability to define potentially infinite data structures. This allows for more straightforward implementation of some algorithms.
+
+So let's have a closer look at those benefits:
+
+### Avoid endless loops in certain edge cases
+
+Consider the following example function:
+
+```haskell
+ignoreY :: Integer -> Integer -> Integer
+ignoreY x y = x
+```
+
+It takes two integer arguments and returns the first one unmodified. The second argument is 
+simply ignored.
+
+In most programming languages both arguments will be
+evaluated before the function body is executed: 
+they use applicative order reduction aka. eager evaluation or call-by-value semantics.
+
+In Haskell on the other hand it is save to call the function with a non-terminating expression in the second argument.
+First we create a non-terminating expression `viciousCircle`. Any attempt to evaluate it will result in an endless loop:
 
 ```haskell
 -- it's possible to define non-terminating expressions like
 viciousCircle :: a
 viciousCircle = viciousCircle
-
--- this expression returns True because of lazy evaluation:
-test = (4 == 4) || viciousCircle
 ```
+
+But if we use `viciousCircle` as second argument to the function `ignoreY` it will simply be ignored and the first argument
+is returned:
+
+```haskell
+-- trying it in GHCi:
+λ> ignoreY 42 viciousCircle
+42
+```
+
+### Define potentially infinite data structures
+
+
+### define control flow (structures) as abstractions instead of primitives
+
 
 ---
 ---
@@ -766,7 +816,7 @@ Damit lässt sich Seiteneffektfreie Programmierung realisieren ("Purity")
 
 - Polymorphie (Z.B für "operator overloading", Generische Container Datentypen, etc. auf Basis von "TypKlassen")
 
-- Algebraische Datentypen (Summentypen + Produkttypen) AD helfen typische Fehler, di man von OO Polymorphie kenn zu vermeiden. Sie erlauben es, Code für  viele Oerationen auf Datentypen komplett automatisch vom Compiler generieren zu lassen).
+- Algebraische Datentypen (Summentypen + Produkttypen) AD helfen typische Fehler, die man von OO Polymorphie kenn zu vermeiden. Sie erlauben es, Code für  viele Oerationen auf Datentypen komplett automatisch vom Compiler generieren zu lassen).
 
 - Pattern Matching erlaubt eine sehr klare Verarbeitung von ADTs
 

@@ -9,6 +9,8 @@ viciousCircle = viciousCircle
 -- this expression returns True because of lazy evaluation:
 test = (4 == 4) || viciousCircle
 
+ignoreY :: Integer -> Integer -> Integer
+ignoreY x y = x
 
 -- arithmetic sequences
 -- all natural numbers
@@ -20,6 +22,8 @@ evens = [2,4..]
 -- all odd numbers
 odds  = [1,3..]
 
+fibs :: [Integer]
+fibs = 0 : 1 : zipWith (+) fibs (tail fibs)
 
 -- the set of all pythagorean triples PT = {(a,b,c) | a,b,c ∊ ℕ ∧ a² + b² = c² }
 pt :: [(Natural,Natural,Natural)]

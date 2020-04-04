@@ -89,6 +89,3 @@ prod' = foldr (*) 1
 foldMap :: (Monoid m) => (a -> m) -> [a] -> m
 foldMap f = foldr (mappend . f) mempty
 
-
-
-
