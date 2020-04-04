@@ -41,7 +41,27 @@ primes = sieve (2:[3,5..])
 wenn :: Bool -> b -> b -> b
 wenn p x y = if p then x else y    
 
-cond :: [(Bool, a)] -> [a]
-cond []                 = []
-cond ((True,  v):rest)  = v : cond rest
+cond :: [(Bool, a)] -> a
+cond []                 = error "make sure that at least one condition is true"
+cond ((True,  v):rest)  = v
 cond ((False, _):rest)  = cond rest
+
+sign :: (Ord a, Num a) => a -> a
+sign x = cond [(x > 0     , 1 )
+              ,(x < 0     , -1)
+              ,(otherwise , 0 )]
+              
+-- |An operator that allows you to write C-style ternary conditionals of
+-- the form:
+-- > p ? t ?? f
+infixr  0 ?
+(?) :: b -> (b -> a) -> a
+p ? f = f p
+
+-- |'if' with the 'Bool' argument at the end (infixr 1).
+infixr  1 ??
+(??) :: a -> a -> Bool -> a
+(??) t f p = if p then t else f
+
+oddOrEven :: Integral a => a -> String
+oddOrEven x = (odd x) ? "odd" ?? "even" 

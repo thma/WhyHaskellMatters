@@ -29,6 +29,7 @@ nevertheless this article is not meant to be a full introduction to the language
 - [Pattern matching (part 1)](#pattern-matching-part-1)
 - [Algebraic Data Types](#algebraic-data-types)
 - [Polymorphic Data Types](#polymorphic-data-types)
+  - [Lists](#lists)
 - [Declarative programming](#declarative-programming)
 - [Non-strict Evaluation](#non-strict-evaluation)
 
@@ -610,6 +611,37 @@ Of course we don't have to invent functions like `filter` on our own but can rel
 predefined functions working on lists](https://hackage.haskell.org/package/base-4.12.0.0/docs/Data-List.html) 
 in the Haskell base library.
 
+#### Arithmetic sequences
+
+There is a nice feature that often comes in handy when dealing with lists of numbers. It's called *arithmetic sequences* and
+allows you to define lists of numbers with a concise syntax:
+
+```haskell
+upToHundred :: [Integer]
+upToHundred = [1..100]
+```
+
+As expected this assigns `upToHundred` with a list of integers from 1 to 100.
+
+It's also possible to define a step width that determines the increment between the subsequent numbers.
+If we want only the odd numbers we can construct them like this:
+```haskell
+oddsUpToHundred :: [Integer]
+oddsUpToHundred = [1,3..100]
+```
+
+Arithmetic sequences can also be used in more dynamic cases. For example we can define the `factorial` function like this:
+```math
+n! = 1 * 2 * 3 ... (n-2) * (n-1) * n, for integers > 0
+```
+
+In Haskell we can use an arithmetic sequence to define this function:
+
+```haskell
+fac' n   = prod [1..n]
+```
+
+
 ## Declarative programming
 
 In this section I want to explain how programming with *higher order* functions can be used to
@@ -788,6 +820,67 @@ is returned:
 
 ### Define potentially infinite data structures
 
+In the [section on lists](#lists) we have already met *arithmetic sequences* like `[1..10]`.
+
+Arithmetic sequences can also be used to define infinite lists of numbers.
+Here are a few examples:
+
+```haskell
+-- all natural numbers
+naturalNumbers = [1..]
+
+-- all even numbers
+evens = [2,4..]
+
+-- all odd numbers
+odds  = [1,3..]
+```
+
+Defining those infinite lists is rather easy. But can we do with them? Are they useful for any purpose? In the `viciousCircle` example above we have learnt that
+defining that expression is fine but any attempt to evaluate it will result in an infinite loop.
+
+If we try to print `naturalNumbers` we will also end up in an infinite loop of integers printed to the screen.
+
+But if we are bit less greedy than asking for all natural numbers everything will be OK.
+
+```haskell
+λ> take 10 naturalNumbers
+[1,2,3,4,5,6,7,8,9,10]
+
+λ> take 10 evens
+[2,4,6,8,10,12,14,16,18,20]
+
+λ> take 10 odds
+[1,3,5,7,9,11,13,15,17,19]
+```
+
+We can also peak at a specific position in such an infinite list, using the `(!!)` operator:
+
+```haskell
+λ> odds !! 5000
+10001
+
+λ> evens !! 10000
+20002
+```
+
+### List comprehension
+
+```haskell
+-- the set of all pythagorean triples PT = {(a,b,c) | a,b,c ∊ ℕ ∧ a² + b² = c² }
+pt :: [(Natural,Natural,Natural)]
+pt = [(a,b,c) | c <- [2..],
+                b <- [2..c-1],
+                a <- [2..b-1],
+                a^2 + b^2 == c^2]
+
+-- infinite list of all prime numbers
+primes :: [Integer]
+primes = sieve (2:[3,5..])
+  where 
+    sieve (p:xs) = p:sieve [x | x <- xs, x `rem` p > 0]
+
+```
 
 ### define control flow (structures) as abstractions instead of primitives
 

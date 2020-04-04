@@ -8,12 +8,14 @@ import Functions (square, double)
 someNumbers :: [Integer]
 someNumbers = [49,64,97,54,19,90,934,22,215,6,68,325,720,8082,1,33,31]
 
--- use list comprehension to generate a list of hundred Integers
+-- use arithmetic sequences to generate a list of hundred Integers
 upToHundred :: [Integer]
 upToHundred = [1..100]
 
 oddsUpToHundred :: [Integer]
 oddsUpToHundred = [1,3..100]
+
+fac' n   = prod [1..n]
 
 length :: [a] -> Integer
 length []     =  0
@@ -88,4 +90,5 @@ prod' = foldr (*) 1
 -- and combine the results.
 foldMap :: (Monoid m) => (a -> m) -> [a] -> m
 foldMap f = foldr (mappend . f) mempty
+
 
