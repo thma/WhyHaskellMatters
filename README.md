@@ -866,23 +866,55 @@ We can also peak at a specific position in such an infinite list, using the `(!!
 
 ### List comprehension
 
+Do you remember *set comprehension* notation from your math classes?
+
+As simple example would be the definition of the set of even numbers:
+
+> Evens = {i | i = 2n ∧ n ∊ ℕ}
+
+Which can be read as: Evens is defined as the set of all `i` where `i = 2*n` and `n` is an element of the set of natural numbers.
+
+The Haskell *list comprehension* allows us to define - potentially infinite - lists with a similar syntax:
+
 ```haskell
--- the set of all pythagorean triples PT = {(a,b,c) | a,b,c ∊ ℕ ∧ a² + b² = c² }
-pt :: [(Natural,Natural,Natural)]
-pt = [(a,b,c) | c <- [2..],
-                b <- [2..c-1],
-                a <- [2..b-1],
-                a^2 + b^2 == c^2]
-
--- infinite list of all prime numbers
-primes :: [Integer]
-primes = sieve (2:[3,5..])
-  where 
-    sieve (p:xs) = p:sieve [x | x <- xs, x `rem` p > 0]
-
+evens' = [2*n | n <- [1..]]
 ```
 
-### define control flow (structures) as abstractions instead of primitives
+Again we can avoid infinite loops by evaluating only a finite subset of `evens'`:
+
+```haskell
+λ> take 10 evens'
+[2,4,6,8,10,12,14,16,18,20]
+```
+
+List comprehension can be very useful for defining numerical sets in a very declarative way that comes quite close to
+the original mathematical definitions.
+
+Take for example the set `PT` of all pythagorean triples
+
+>  PT = {(a,b,c) | a,b,c ∊ ℕ ∧ a² + b² = c² }
+
+The Haskell definition looks like this:
+
+```haskell
+pt :: [(Natural,Natural,Natural)]
+pt = [(a,b,c) | c <- [1..],
+                b <- [1..c],
+                a <- [1..b],
+                a^2 + b^2 == c^2]
+```
+
+
+### define control flow structures as abstractions instead of primitives
+
+In most languages it is not possible to define new conditional operations, e.g. your own `myIf` statement.
+A conditional operation will evaluate some of its arguments only if certain conditions are met.
+This is very hard to implement in language with call-by-value semantics which evaluates all function arguments before
+actually evaluating the function body.
+
+As Haskell implements call-by-need semantics, it is quite possible to define new conditional operations.
+In fact this is quite helpful when writing *domain specific languages*.
+
 
 
 ---

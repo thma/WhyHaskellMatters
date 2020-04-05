@@ -25,11 +25,22 @@ odds  = [1,3..]
 fibs :: [Integer]
 fibs = 0 : 1 : zipWith (+) fibs (tail fibs)
 
+evens' :: [Integer]
+evens' = [2*n | n <- [1..]]
+
+odds' :: [Integer]
+odds' = [2*i - 1 | i <- [1..]]
+
+squares :: [(Natural,Natural)]
+squares = [(a,b) | a <- [1..],
+                   b <- [1..a],
+                   b^2 == a]
+
 -- the set of all pythagorean triples PT = {(a,b,c) | a,b,c ∊ ℕ ∧ a² + b² = c² }
 pt :: [(Natural,Natural,Natural)]
-pt = [(a,b,c) | c <- [2..],
-                b <- [2..c-1],
-                a <- [2..b-1],
+pt = [(a,b,c) | c <- [1..],
+                b <- [1..c],
+                a <- [1..b],
                 a^2 + b^2 == c^2]
 
 -- infinite list of all prime numbers
@@ -38,8 +49,8 @@ primes = sieve (2:[3,5..])
   where 
     sieve (p:xs) = p:sieve [x | x <- xs, x `rem` p > 0]
     
-wenn :: Bool -> b -> b -> b
-wenn p x y = if p then x else y    
+myIf :: Bool -> b -> b -> b
+myIf p x y = if p then x else y    
 
 cond :: [(Bool, a)] -> a
 cond []                 = error "make sure that at least one condition is true"
