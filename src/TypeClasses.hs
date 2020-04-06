@@ -2,6 +2,15 @@ module TypeClasses where
 
 data Color = Blue | Yellow | Red | Green | White deriving (Eq, Show)
 
+instance Num Char where
+  a + b = toEnum (fromEnum a + fromEnum b)
+  a * b = toEnum (fromEnum a * fromEnum b)
+  abs c = c
+  signum c = toEnum (signum (fromEnum c))
+  fromInteger = toEnum . fromInteger
+  negate c = c
+
+
 -- Y + R = Orange
 -- R + B = Violett
 -- B + G = Green
