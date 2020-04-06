@@ -30,8 +30,10 @@ nevertheless this article is not meant to be a full introduction to the language
 - [Algebraic Data Types](#algebraic-data-types)
 - [Polymorphic Data Types](#polymorphic-data-types)
   - [Lists](#lists)
+- [Immutability](#immutability)
 - [Declarative programming](#declarative-programming)
 - [Non-strict Evaluation](#non-strict-evaluation)
+- [Type Classes](#type-classes)
 
 ## Introduction
 
@@ -641,6 +643,36 @@ In Haskell we can use an arithmetic sequence to define this function:
 fac' n   = prod [1..n]
 ```
 
+## Immutability
+
+> In object-oriented and functional programming, an immutable object is an object 
+> whose state cannot be modified after it is created. This is in contrast to a mutable object 
+> (changeable object), which can be modified after it is created.
+>  
+> Quoted from [Wikipedia](https://en.wikipedia.org/wiki/Immutable_object)
+
+This is going to be a very short section. In Haskell all data is immutable. Period.
+
+Let's look at some interactions with the Haskell GHCi REPL:
+
+```haskell
+λ> a = [1,2,3]
+λ> a
+[1,2,3]
+λ> reverse a
+[3,2,1]
+λ> a
+[1,2,3]
+```
+
+In Haskell there is no way to change the value of `a` after its initial creation. There are no *destructive* 
+operations available as in some other functional languages like Lisp, Scheme or ML.
+
+The huge benefit of this is that refactorings become much simpler as in languages where every function or method
+might mutate data. Thus it will also be more easy to reason about a given piece of code.
+
+Of course this also makes programming of concurrent operations much easier. With a *shared nothing* approach, 
+Haskell programs will automatically be thread-safe.
 
 ## Declarative programming
 
@@ -887,8 +919,8 @@ Again we can avoid infinite loops by evaluating only a finite subset of `evens'`
 [2,4,6,8,10,12,14,16,18,20]
 ```
 
-List comprehension can be very useful for defining numerical sets in a very declarative way that comes quite close to
-the original mathematical definitions.
+List comprehension can be very useful for defining numerical sets and series in a (mostly) declarative way that comes 
+close to the original mathematical definitions.
 
 Take for example the set `PT` of all pythagorean triples
 
@@ -904,16 +936,51 @@ pt = [(a,b,c) | c <- [1..],
                 a^2 + b^2 == c^2]
 ```
 
-
 ### define control flow structures as abstractions instead of primitives
 
 In most languages it is not possible to define new conditional operations, e.g. your own `myIf` statement.
 A conditional operation will evaluate some of its arguments only if certain conditions are met.
-This is very hard to implement in language with call-by-value semantics which evaluates all function arguments before
+This is very hard - if not impossible - to implement in language with call-by-value semantics which evaluates all function arguments before
 actually evaluating the function body.
 
-As Haskell implements call-by-need semantics, it is quite possible to define new conditional operations.
+As Haskell implements call-by-need semantics, it is possible to define new conditional operations.
 In fact this is quite helpful when writing *domain specific languages*.
+
+Here comes a very simple version of `myIf`:
+
+```haskell
+myIf :: Bool -> b -> b -> b
+myIf p x y = if p then x else y 
+
+λ> myIf (4 > 2) "true" viciousCircle
+"true"
+```
+
+A somewhat more useful control-structure is the `cond` (for conditional) function that stems from LISP and Scheme languages.
+It allows you to define a more table-like decision structure, somewhat resembling a `switch` statement from C-style languages:
+
+```haskell
+cond :: [(Bool, a)] -> a
+cond []                 = error "make sure that at least one condition is true"
+cond ((True,  v):rest)  = v
+cond ((False, _):rest)  = cond rest
+```
+
+With this function we can implement a signum function `sign` as follows:
+
+```haskell
+sign :: (Ord a, Num a) => a -> a
+sign x = cond [(x > 0     , 1 )
+              ,(x < 0     , -1)
+              ,(otherwise , 0 )]
+
+λ> sign 5
+1
+λ> sign 0
+0
+λ> sign (-4)
+-1
+```
 
 
 
