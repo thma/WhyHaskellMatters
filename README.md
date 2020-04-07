@@ -501,6 +501,8 @@ data constructor `P` takes a value of type `a` and a value of type `b` and retur
 (the data constructor `P`  has the signature `P :: a -> b -> Pair a b`).
 The type `Pair` can now be used to create many different concrete data types it is thus 
 called a *polymorphic* data type.
+As the Polymorphism is defined by type variables, i.e. parameters to the type declarations, this mechanism is
+called *parametric polymorphism*.
 
 As pairs and n-tuples are so frequently used, the Haskell language designers have added some syntactic sugar to
 work effortlessly with them.
@@ -982,6 +984,149 @@ sign x = cond [(x > 0     , 1 )
 -1
 ```
 
+## Type Classes
+
+Now we come to one of the most distinguishing features of Haskell: *type classes*.
+
+In the section [Polymorphic Data Types](#polymorphic-data-types) we have seen that type variables (or parameters) allow 
+type declarations to be polymorphic like in:
+
+```haskell
+data [a] = [] | a : [a]
+```
+
+This approach is called *parametric polymorphism* and is used in several programming languages.
+
+Type classes on the other hand address *ad hoc polymorphism* of data types. This approach is also known as
+*overloading*.
+
+To get a first intuition let's start with a simple example.
+
+We would like to be able to use characters (represented by the data type `Char`) as if they were numbers.
+E.g. we would like to be able to things like:
+ 
+```haskell
+λ> 'A' + 25
+'Z'
+
+-- please note that in Haskell a string is List of characters: type String = [Char]
+λ> map (+ 5) "hello world"
+"mjqqt%|twqi"
+
+λ> map (\c -> c - 5) "mjqqt%|twqi"
+"hello world"
+```
+
+To enable this we will have to *overload* the infix operators `(+)` and `(-)` to work not only on numbers but also on characters.
+Now, let's have a look at the type signature of the `(+)` operator:
+
+```haskell
+λ> :type (+)
+(+) :: Num a => a -> a -> a
+```
+
+So `(+)` is not just declared to be of type `(+) :: a -> a -> a` but it contains a **constraint** on the type variable `a`, 
+namely `Num a =>`. 
+The whole type signature of `(+)` can be read as: for all types `a` that are members of the type class `Num` the operator `(+)` has the type
+`a -> a -> a`.
+
+Next we obtain more information on the type class `Num`:
+
+```haskell
+λ> :info Num
+class Num a where
+  (+) :: a -> a -> a
+  (-) :: a -> a -> a
+  (*) :: a -> a -> a
+  negate :: a -> a
+  abs :: a -> a
+  signum :: a -> a
+  fromInteger :: Integer -> a
+  {-# MINIMAL (+), (*), abs, signum, fromInteger, (negate | (-)) #-}
+  	-- Defined in `GHC.Num'
+instance Num Word -- Defined in `GHC.Num'
+instance Num Integer -- Defined in `GHC.Num'
+instance Num Int -- Defined in `GHC.Num'
+instance Num Float -- Defined in `GHC.Float'
+instance Num Double -- Defined in `GHC.Float'
+```
+
+This information details what functions a type `a` has to implement to be used as an instance of the `Num` type class.
+The line `{-# MINIMAL (+), (*), abs, signum, fromInteger, (negate | (-)) #-}` tells us what a minimal complete implementation
+has to provide.
+It also tells us that the types `Word`, `Integer`, `Int`, `Float` and `Double` are instances of the `Num` type class.
+
+This is all we need to know to make the type `Char` an instance of the `Num` type class, so without further ado we
+dive into the implementation (please note that `fromEnum` converts a `Char` into an `Int` and `toEnum` converts 
+an `Int` into an `Char`):
+
+```haskell
+instance Num Char where
+  a + b       = toEnum (fromEnum a + fromEnum b)
+  a - b       = toEnum (fromEnum a - fromEnum b)
+  a * b       = toEnum (fromEnum a * fromEnum b)
+  abs c       = c
+  signum      = toEnum . signum . fromEnum
+  fromInteger = toEnum . fromInteger
+  negate c    = c
+```
+
+This piece of code makes the type `Char` an instance of the `Num` type class. We can then use `(+)` and `(-) as demonstrated
+above.
+
+Originally the idea for type classes came up to provide overloading of arithmetic operators
+in order to use the same operators across all numeric types.
+
+But the type classes concept proved to be useful in a variety of other cases as well. 
+This has lead to a rich sets of type classes provided by the Haskell base library and
+a wealth of programming techniques that make use of this powerful concept.
+
+Here comes a graphic overview of some of the most important type classes in the Haskell base library:
+
+![The hierarchy of basic type classes](https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Base-classes.svg/510px-Base-classes.svg.png)
+
+I won't go all of these but I I'll cover some of the most important ones.
+ 
+Let's start with Eq:
+
+```haskell
+class  Eq a  where
+   (==), (/=) :: a -> a -> Bool
+
+       -- Minimal complete definition:
+       --      (==) or (/=)
+   x /= y     =  not (x == y)
+   x == y     =  not (x /= y)
+``` 
+
+This definition states two things: 
+
+- if a type `a` is to be made an instance of the class `Eq` it must support the 
+  functions `(==)` and `(/=)` both of them having  type `a -> a -> Bool`.  
+- `Eq` provides default definitions for `(==)` and `(/=)` in terms of each other. 
+   As a consequence, there is no need for a type in `Eq` to provide both definitions - 
+   given one of them, the other will be generated automatically.
+
+Now we can turn some of the data types that we defined in the section on 
+[Algebraic Data Types](#algebraic-data-types) into instances of the `Eq` type class.
+
+```haskell
+data Status = Green | Yellow | Red
+data Severity = Low | Middle | High 
+data PairStatusSeverity = PSS Status Severity
+
+ 
+instance Eq PairStatusSeverity where
+   (PSS sta1 sev1) == (PSS sta2 sev2) = (sta1 == sta2) && (sev1 == sev2)
+```
+
+
+- Eq
+- Read, Show
+
+- deriving
+- complex interfaces
+- interpreter style
 
 
 ---
@@ -989,18 +1134,9 @@ sign x = cond [(x > 0     , 1 )
 
 This is my scrap book (don't look at it)
 
-- Funktionen sind 1st class citizens (higher order functions, Funktionen könen neue Funktionen erzeugen und andere Funktionen als Argumente haben)
-
-- Abstraktion über Resource management und Abarbeitung (=> deklarativ)
-
-- Immutability ("Variables do not Vary")
-
 - Seiteneffekte müssen in Funktions signaturen explizit gemacht werden.
 D.H wenn keine Seiteneffekt angegeben ist, verhindert der Compiler, dass welche auftreten !
 Damit lässt sich Seiteneffektfreie Programmierung realisieren ("Purity")
-
-- Evaluierung in Haskell ist "non-strict" (aka "lazy"). Damit lassen sich z.B. abzählbar unendliche Mengen (z.B. alle Primzahlen) sehr elegant beschreiben.
-  Aber auch kontrollstrukturen lassen sich so selbst bauen (super für DSLs) 
 
 - Static and Strong typing (Es gibt kein Casting)
 
@@ -1008,15 +1144,9 @@ Damit lässt sich Seiteneffektfreie Programmierung realisieren ("Purity")
 
 - Polymorphie (Z.B für "operator overloading", Generische Container Datentypen, etc. auf Basis von "TypKlassen")
 
-- Algebraische Datentypen (Summentypen + Produkttypen) AD helfen typische Fehler, die man von OO Polymorphie kenn zu vermeiden. Sie erlauben es, Code für  viele Oerationen auf Datentypen komplett automatisch vom Compiler generieren zu lassen).
-
-- Pattern Matching erlaubt eine sehr klare Verarbeitung von ADTs
-
 - Eleganz: Viele Algorithmen lassen sich sehr kompakt und nah an der Problemdomäne formulieren.
 
 - Data Encapsulation durch Module
-
-
 
 - Weniger Bugs durch
 

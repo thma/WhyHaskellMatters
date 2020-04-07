@@ -4,19 +4,20 @@ module AlgebraicDataTypes where
 import Control.Monad ((>=>))
 
 -- a simple sum type
-data Status = Green | Yellow | Red deriving (Eq, Show)
-
-data Severity = Low | Middle | High deriving (Eq, Show)
+data Status = Green | Yellow | Red --deriving (Eq, Show)
+data Severity = Low | Middle | High --deriving (Eq, Show)
 
 severity :: Status -> Severity
 severity Green  = Low
 severity Yellow = Middle
 severity Red    = High
 
-data StatusSeverityTuple = SST Status Severity  deriving (Eq, Show)
+data StatusSeverityTuple = SST Status Severity  --deriving (Eq, Show)
+
+data PairStatusSeverity = PSS Status Severity
 
 -- a simple product type
-data Pair = P Status Severity deriving (Show)
+data Pair = P Status Severity --deriving (Show)
 
 data Tree a = Leaf a | Node (Tree a) (Tree a) deriving (Show)
 

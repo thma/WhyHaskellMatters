@@ -1,24 +1,18 @@
 module TypeClasses where
 
-data Color = Blue | Yellow | Red | Green | White deriving (Eq, Show)
+import AlgebraicDataTypes (Status (..), Severity (..), PairStatusSeverity (..))
 
 instance Num Char where
-  a + b = toEnum (fromEnum a + fromEnum b)
-  a * b = toEnum (fromEnum a * fromEnum b)
-  abs c = c
-  signum c = toEnum (signum (fromEnum c))
+  a + b       = toEnum (fromEnum a + fromEnum b)
+  a - b       = toEnum (fromEnum a - fromEnum b)
+  a * b       = toEnum (fromEnum a * fromEnum b)
+  abs         = id
+  signum      = toEnum . signum . fromEnum
   fromInteger = toEnum . fromInteger
-  negate c = c
+  negate      = id
 
+instance Eq PairStatusSeverity where
+   (PSS sta1 sev1) == (PSS sta2 sev2) = (sta1 == sta2) && (sev1 == sev2)
 
--- Y + R = Orange
--- R + B = Violett
--- B + G = Green
--- G + Y = Yellow-Green
--- Y + Orange = Yello-Orange
--- Orange + Red = Orange-Red
--- R + Violett = Red-Violett
--- Violett + B = Blue-Violett
--- B + G = Blue-Green
--- _ + _ = Black
-
+instance Eq Status where
+  
