@@ -1157,8 +1157,34 @@ data Severity = Low | Middle | High           deriving (Eq)
 data PairStatusSeverity = PSS Status Severity deriving (Eq)
 ```
 
-This automatic deriving of type class instances works for many cases and reduces the need to write 
-boilerplate code.
+This automatic deriving of type class instances works for many cases and reduces a lof of boilerplate code.
+
+### Read and Show
+
+Two other quite useful type classes are `Read` and `Show`. 
+
+`Show` provides a function `show` with the following type signature:
+
+```haskell
+show :: Show a => a -> String
+```
+
+This means that any type implementing `Show` can be converted (or *marshalled*) into a `String` representation.
+Creation of a `Show` instance can be achieved by adding a `deriving (Show)` clause to the type declaration.
+
+```haskell
+data PairStatusSeverity = PSS Status Severity deriving (Show)
+
+λ> show (PSS Green Low)
+"PSS Green Low"
+```
+
+The `Read` type class is used to do the opposite: *unmarshalling* data from a String with the function `read`:
+
+```haskell
+
+```
+
 
 
 
