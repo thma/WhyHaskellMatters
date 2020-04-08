@@ -1103,25 +1103,65 @@ This definition states two things:
 
 - if a type `a` is to be made an instance of the class `Eq` it must support the 
   functions `(==)` and `(/=)` both of them having  type `a -> a -> Bool`.  
-- `Eq` provides default definitions for `(==)` and `(/=)` in terms of each other. 
+- `Eq` provides *default definitions* for `(==)` and `(/=)` in terms of each other. 
    As a consequence, there is no need for a type in `Eq` to provide both definitions - 
-   given one of them, the other will be generated automatically.
+   given one of them, the other will work automatically.
 
 Now we can turn some of the data types that we defined in the section on 
 [Algebraic Data Types](#algebraic-data-types) into instances of the `Eq` type class.
 
+Here the type declarations as a recap:
+
 ```haskell
-data Status = Green | Yellow | Red
+data Status   = Green | Yellow | Red
 data Severity = Low | Middle | High 
 data PairStatusSeverity = PSS Status Severity
-
+```
  
+First, we create Eq instances for the simple types `Status` and `Severity` by defining the `(==)` 
+operator for each of them:
+
+```haskell
+instance Eq Status where
+  Green  == Green  = True
+  Yellow == Yellow = True
+  Red    == Red    = True
+  _      == _      = False
+  
+instance Eq Severity where
+  Low    == Low    = True
+  Middle == Middle = True
+  High   == High   = True
+  _      == _      = False
+```
+
+Next, we create an `Eq` instance for `PairStatusSeverity` by defining the `(==)` operator:
+ 
+```haskell
 instance Eq PairStatusSeverity where
    (PSS sta1 sev1) == (PSS sta2 sev2) = (sta1 == sta2) && (sev1 == sev2)
 ```
 
+With these definitions it is now possible to use the `(==)` and `(/=)` on our three types.
 
-- Eq
+As you will have noticed, the code for implementing `Eq` is quite boring. Even a machine could do it!
+
+That's why the language designers have provided a `deriving` mechanism to let the compiler automatically implement
+type class instances if it's automatically derivable as in the `Eq` case.
+
+With this syntax it much easier to let a type implement the `Eq` type class:
+
+```haskell
+data Status   = Green | Yellow | Red          deriving (Eq)
+data Severity = Low | Middle | High           deriving (Eq)
+data PairStatusSeverity = PSS Status Severity deriving (Eq)
+```
+
+This automatic deriving of type class instances works for many cases and reduces the need to write 
+boilerplate code.
+
+
+
 - Read, Show
 
 - deriving

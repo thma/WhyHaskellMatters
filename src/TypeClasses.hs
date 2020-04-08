@@ -15,4 +15,13 @@ instance Eq PairStatusSeverity where
    (PSS sta1 sev1) == (PSS sta2 sev2) = (sta1 == sta2) && (sev1 == sev2)
 
 instance Eq Status where
+  Green  == Green  = True
+  Yellow == Yellow = True
+  Red    == Red    = True
+  _      == _      = False
   
+instance Eq Severity where
+  Low    == Low    = True
+  Middle == Middle = True
+  High   == High   = True
+  _      == _      = False  
