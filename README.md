@@ -19,7 +19,8 @@ The presentation aims to be self-contained and does not require any previous kno
 I will also try to keep the learning curve moderate and to limit the scope of the presentation;
 nevertheless this article is not meant to be a full introduction to the language.
 
-(If you looking for an enjoyable tutorial have a look at [Learn You a Haskell](http://www.learnyouahaskell.com/.)
+(If you are looking for thorough tutorials have a look at [Haskell Wikibook](https://en.wikibooks.org/wiki/Haskell) or
+ [Learn You a Haskell](http://www.learnyouahaskell.com/.)
 
 
 ## Table of contents
@@ -1157,11 +1158,11 @@ data Severity = Low | Middle | High           deriving (Eq)
 data PairStatusSeverity = PSS Status Severity deriving (Eq)
 ```
 
-This automatic deriving of type class instances works for many cases and reduces a lof of boilerplate code.
+This automatic deriving of type class instances works for many cases and reduces a lof of repetitive code.
 
 ### Read and Show
 
-Two other quite useful type classes are `Read` and `Show`. 
+Two other quite useful type classes are `Read` and `Show` that also support automatic deriving. 
 
 `Show` provides a function `show` with the following type signature:
 
@@ -1182,8 +1183,39 @@ data PairStatusSeverity = PSS Status Severity deriving (Show)
 The `Read` type class is used to do the opposite: *unmarshalling* data from a String with the function `read`:
 
 ```haskell
-
+read :: Read a => String -> a
 ```
+
+This signature says that for any type `a` implementing the `Read` type class the function `read` can
+reconstruct an instance of `a` from its String representation:
+
+```haskell
+data PairStatusSeverity = PSS Status Severity deriving (Show, Read)
+data Status = Green | Yellow | Red            deriving (Show, Read)
+data Severity = Low | Middle | High           deriving (Show, Read)
+
+λ> marshalled = show (PSS Green Low)
+
+λ> read marshalled :: PairStatusSeverity
+PSS Green Low
+```
+
+Please note that it is required to specify the expected target type with the `:: PairStatusSeverity` clause.
+Haskell uses static compile time typing. At compile time there is no way to determine which type
+an expression `read "some string content"` will return. Thus expected type must be specified at compile time.
+Either by an implicit declaration given by some function type signature, or as in the example above,
+by an explicit declaration.
+
+### Homoiconicity
+
+Together `show` and `read` provide a convenient way to serialize (marshal) and deserialize (unmarshal) Haskell
+data structures.
+This mechanism does not provide any optimized binary representation but it is still good enough for
+many practical purposes. And the format is more compact than JSON.
+
+
+
+
 
 
 
