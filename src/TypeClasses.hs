@@ -1,6 +1,6 @@
 module TypeClasses where
 
-import AlgebraicDataTypes (Status (..), Severity (..), PairStatusSeverity (..))
+import AlgebraicDataTypes (Status (..), Severity (..), PairStatusSeverity (..), Tree (..))
 
 instance Num Char where
   a + b       = toEnum (fromEnum a + fromEnum b)
@@ -25,3 +25,20 @@ instance Eq Severity where
   Middle == Middle = True
   High   == High   = True
   _      == _      = False  
+  
+  
+
+{--
+instance Functor Tree where
+  fmap f (Leaf a) = Leaf (f a)
+  fmap f (Node a b) = Node (fmap f a) (fmap f b)
+--}  
+  
+  
+statusTree :: Tree Status
+statusTree = Node (Leaf Green) (Node (Leaf Red) (Leaf Yellow))
+
+toSeverity :: Status -> Severity
+toSeverity Green  = Low
+toSeverity Yellow = Middle
+toSeverity Red    = High

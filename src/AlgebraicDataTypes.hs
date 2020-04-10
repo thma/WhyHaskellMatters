@@ -1,4 +1,5 @@
 {-# OPTIONS_GHC -fwarn-incomplete-patterns #-} -- ensure that all possible instances are covered in pattern matching
+{-# LANGUAGE DeriveFunctor #-} -- allows automatic deriving of Functor
 module AlgebraicDataTypes where
 
 import Control.Monad ((>=>))
@@ -19,7 +20,7 @@ data PairStatusSeverity = PSS Status Severity deriving (Show, Read)
 -- a simple product type
 data Pair = P Status Severity --deriving (Show)
 
-data Tree a = Leaf a | Node (Tree a) (Tree a) deriving (Show)
+data Tree a = Leaf a | Node (Tree a) (Tree a) deriving (Eq, Show, Read, Functor)
 
 --data Maybe a = Just a | Nothing deriving (Eq, Show)
 

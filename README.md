@@ -17,7 +17,7 @@ to learn about concepts of functional programming and Haskell in particular.
 
 The presentation aims to be self-contained and does not require any previous knowledge of the language.
 I will also try to keep the learning curve moderate and to limit the scope of the presentation;
-nevertheless this article is not meant to be a full introduction to the language.
+nevertheless this article is by no means a complete introduction to the language.
 
 (If you are looking for thorough tutorials have a look at [Haskell Wikibook](https://en.wikibooks.org/wiki/Haskell) or
  [Learn You a Haskell](http://www.learnyouahaskell.com/.)
@@ -35,6 +35,7 @@ nevertheless this article is not meant to be a full introduction to the language
 - [Declarative programming](#declarative-programming)
 - [Non-strict Evaluation](#non-strict-evaluation)
 - [Type Classes](#type-classes)
+  -[Functor and Foldable](#functor-and-foldable)
 
 ## Introduction
 
@@ -1213,8 +1214,82 @@ many practical purposes, the format is more compact than JSON, and it does not r
 
 
 
+### Functor and Foldable
+
+The most interesting of the Haskell type classes are those derived from abstract algebra or category theory.
+Studying them is a very rewarding process that I'm highly recommending. However, it is definitely
+beyond the scope of the present article. Thus, I'm only pointing to two resources covering this part of the Haskell
+type class hierarchy.
+The first one is the legendary [Typeclassopedia](https://wiki.haskell.org/Typeclassopedia) by Brent Yorgey. 
+The second one is [Lambda the ultimate Pattern Factory](https://github.com/thma/LtuPatternFactory)  by myself. 
+This text is relating the algebraic type classes to software design patterns.
+
+So we will only cover some of these type classes.
+
+In the section on [declarative programming](#declarative-programming) we came across to very useful concepts:
+
+- mapping a function over all elements of a list (`map :: (a -> b) -> [a] -> [b]`)
+- reducing a list with a binary operation and the neutral (identity) element of that operation 
+  (`foldr :: (a -> b -> b) -> b -> [a] -> b`)
+
+These concepts are not only useful for lists, but also for many other data structures. So it doesn't come as a
+surprise that there type classes that abstract these concepts.
+
+The `Functor` type class generalizes the functionality of applying a function to a value in a context without altering the context, 
+(e.g. mapping a function over a list `[a]` which returns a new list `[b]` of the same length):
+
+```haskell
+class Functor f where
+  fmap :: (a -> b) -> f a -> f b
+```
+
+Let's a closer look at this idea by playing with a simple binary tree:
+
+```haskell
+data Tree a = Leaf a | Node (Tree a) (Tree a) deriving (Show)
+
+-- a simple instance binary tree:
+statusTree :: Tree Status
+statusTree = Node (Leaf Green) (Node (Leaf Red) (Leaf Yellow))
+
+-- a function mapping Status to Severity
+toSeverity :: Status -> Severity
+toSeverity Green  = Low
+toSeverity Yellow = Middle
+toSeverity Red    = High
+```
+
+We want to use the function `toSeverity :: Status -> Severity` to convert all `Status` elements of the `statusTree`
+into `Severity` instances.
+
+Therefore, we let `Tree` instantiate the `Functor` class:
+
+```haskell
+instance Functor Tree where
+  fmap f (Leaf a)   = Leaf (f a)
+  fmap f (Node a b) = Node (fmap f a) (fmap f b)
+```
 
 
+We can now use `fmap` on `Tree` data structures:
+
+```haskell
+λ> fmap toSeverity statusTree
+Node (Leaf Low) (Node (Leaf High) (Leaf Middle))
+λ> :type it
+it :: Tree Severity
+```
+
+As already described above, fmap maintains the tree structure unchanged but converts the type of each `Leaf` element, 
+which effectively changes the type of the tree to `Tree Severity`.
+
+As derivation of `Functor` instances is a boring task, it is again possible to use the `deriving` clause to
+let data types instantiate `Functor`:
+
+```haskell
+{-# LANGUAGE DeriveFunctor #-} -- this pragma allows automatic deriving of Functor instances
+data Tree a = Leaf a | Node (Tree a) (Tree a) deriving (Show, Functor)
+```
 
 ---
 ---
