@@ -1206,25 +1206,15 @@ an expression `read "some string content"` will return. Thus expected type must 
 Either by an implicit declaration given by some function type signature, or as in the example above,
 by an explicit declaration.
 
-### Homoiconicity
-
 Together `show` and `read` provide a convenient way to serialize (marshal) and deserialize (unmarshal) Haskell
 data structures.
-This mechanism does not provide any optimized binary representation but it is still good enough for
-many practical purposes. And the format is more compact than JSON.
+This mechanism does not provide any optimized binary representation, but it is still good enough for
+many practical purposes, the format is more compact than JSON, and it does not require a parser library.
 
 
 
 
 
-
-
-
-- Read, Show
-
-- deriving
-- complex interfaces
-- interpreter style
 
 
 ---
@@ -1232,15 +1222,17 @@ many practical purposes. And the format is more compact than JSON.
 
 This is my scrap book (don't look at it)
 
+
+type classes
+- complex interfaces
+- interpreter style
+
 - Seiteneffekte müssen in Funktions signaturen explizit gemacht werden.
 D.H wenn keine Seiteneffekt angegeben ist, verhindert der Compiler, dass welche auftreten !
 Damit lässt sich Seiteneffektfreie Programmierung realisieren ("Purity")
 
 - Static and Strong typing (Es gibt kein Casting)
-
 - Type Inferenz. Der Compiler kann die Typ-Signaturen von Funktionen selbst ermitteln. (Eine explizite Signatur ist aber möglich und oft auch sehr hilfreich für Doku und um Klarheit über Code zu gewinnen.)
-
-- Polymorphie (Z.B für "operator overloading", Generische Container Datentypen, etc. auf Basis von "TypKlassen")
 
 - Eleganz: Viele Algorithmen lassen sich sehr kompakt und nah an der Problemdomäne formulieren.
 
@@ -1271,19 +1263,12 @@ Damit lässt sich Seiteneffektfreie Programmierung realisieren ("Purity")
 
 ## toc for code chapters (still in german)
 
-- Werte
-- Funktionen
-- Listen
-- Lazyness
-    - List comprehension
-    - Eigene Kontrollstrukturen
-    
-- Algebraische Datentypen
-    - Summentypen : Ampelstatus
-    - Produkttypen (int, int)
-      Beispiel: Baum mit Knoten (int, Ampelstatus) dann mit map ein Ampelstatus
-- deriving (Show, Read) für einfache Serialisierung
-- Homoiconicity (Kind of)
+ - TypKlassen
+   - Automatic deriving
+     (Functor mit Baum Beispiel)
+     Baum mit Knoten Status dann mit map nach Severity
+
+
 - Maybe Datentyp
     - totale Funktionen
     - Verkettung von Maybe operationen  
@@ -1292,12 +1277,7 @@ Damit lässt sich Seiteneffektfreie Programmierung realisieren ("Purity")
       
  - explizite Seiten Effekte -> IO Monade
  
- - TypKlassen
-   - Polymorphismus
-     z.B. Num a, Eq a
-   - Show, Read => Homoiconicity bei Serialisierung
-   - Automatic deriving
-     (Functor mit Baum Beispiel)
+- static typing  
      
 - Testbarkeit
     - TDD, higher order functions assembly, Typklassen dispatch (https://jproyo.github.io/posts/2019-03-17-tagless-final-haskell.html)
