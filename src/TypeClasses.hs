@@ -1,6 +1,7 @@
 module TypeClasses where
 
 import AlgebraicDataTypes (Status (..), Severity (..), PairStatusSeverity (..), Tree (..))
+import Data.Foldable
 
 instance Num Char where
   a + b       = toEnum (fromEnum a + fromEnum b)
@@ -14,6 +15,7 @@ instance Num Char where
 instance Eq PairStatusSeverity where
    (PSS sta1 sev1) == (PSS sta2 sev2) = (sta1 == sta2) && (sev1 == sev2)
 
+{--
 instance Eq Status where
   Green  == Green  = True
   Yellow == Yellow = True
@@ -26,14 +28,20 @@ instance Eq Severity where
   High   == High   = True
   _      == _      = False  
   
-  
+--}
 
 {--
 instance Functor Tree where
   fmap f (Leaf a) = Leaf (f a)
   fmap f (Node a b) = Node (fmap f a) (fmap f b)
 --}  
-  
+
+{--
+instance Foldable Tree where
+  foldr f i (Leaf a) = f a i
+  foldr f i (Node a b) = foldr f (foldr f i b) a
+   
+--}  
   
 statusTree :: Tree Status
 statusTree = Node (Leaf Green) (Node (Leaf Red) (Leaf Yellow))
@@ -42,3 +50,8 @@ toSeverity :: Status -> Severity
 toSeverity Green  = Low
 toSeverity Yellow = Middle
 toSeverity Red    = High
+
+maxStatus = foldr max Green statusTree
+maxStatus' = maximum statusTree
+
+treeSize = length statusTree

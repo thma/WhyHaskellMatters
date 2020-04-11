@@ -1,12 +1,12 @@
 {-# OPTIONS_GHC -fwarn-incomplete-patterns #-} -- ensure that all possible instances are covered in pattern matching
-{-# LANGUAGE DeriveFunctor #-} -- allows automatic deriving of Functor
+{-# LANGUAGE DeriveFunctor, DeriveFoldable #-} -- allows automatic deriving of Functor and Foldable
 module AlgebraicDataTypes where
 
 import Control.Monad ((>=>))
 
 -- a simple sum type
-data Status = Green | Yellow | Red deriving (Show, Read)
-data Severity = Low | Middle | High deriving (Show, Read)
+data Status = Green | Yellow | Red  deriving (Eq, Ord, Show, Read)
+data Severity = Low | Middle | High deriving (Eq, Ord, Show, Read)
 
 severity :: Status -> Severity
 severity Green  = Low
@@ -20,7 +20,7 @@ data PairStatusSeverity = PSS Status Severity deriving (Show, Read)
 -- a simple product type
 data Pair = P Status Severity --deriving (Show)
 
-data Tree a = Leaf a | Node (Tree a) (Tree a) deriving (Eq, Show, Read, Functor)
+data Tree a = Leaf a | Node (Tree a) (Tree a) deriving (Eq, Show, Read, Functor, Foldable)
 
 --data Maybe a = Just a | Nothing deriving (Eq, Show)
 

@@ -29,7 +29,7 @@ nevertheless this article is by no means a complete introduction to the language
 
 - [Introduction](#introduction)
 - [Functions are first class](#functions-are-first-class)
-- [Pattern matching (part 1)](#pattern-matching-part-1)
+- [Pattern matching](#pattern-matching)
 - [Algebraic Data Types](#algebraic-data-types)
 - [Polymorphic Data Types](#polymorphic-data-types)
   - [Lists](#lists)
@@ -370,7 +370,7 @@ ifOddSquare'' :: Integer -> Integer
 ifOddSquare'' n = ifPredGrow odd square n
 ```
 
-## Pattern matching (part 1)
+## Pattern matching
 
 With the things that we have learnt so far, we can now start to implement some more interesting functions.
 So what about implementing the recursive [factorial function](https://en.wikipedia.org/wiki/Factorial)?
@@ -1218,7 +1218,7 @@ many practical purposes, the format is more compact than JSON, and it does not r
 
 ### Functor and Foldable
 
-The most interesting of the Haskell type classes are those derived from abstract algebra or category theory.
+The most interesting type classes are those derived from abstract algebra or category theory.
 Studying them is a very rewarding process that I'm highly recommending. However, it is definitely
 beyond the scope of the present article. Thus, I'm only pointing to two resources covering this part of the Haskell
 type class hierarchy.
@@ -1236,6 +1236,8 @@ In the section on [declarative programming](#declarative-programming) we came ac
 
 These concepts are not only useful for lists, but also for many other data structures. So it doesn't come as a
 surprise that there type classes that abstract these concepts.
+
+#### Functor
 
 The `Functor` type class generalizes the functionality of applying a function to a value in a context without altering the context, 
 (e.g. mapping a function over a list `[a]` which returns a new list `[b]` of the same length):
@@ -1293,6 +1295,72 @@ let data types instantiate `Functor`:
 data Tree a = Leaf a | Node (Tree a) (Tree a) deriving (Show, Functor)
 ```
 
+#### Foldable
+
+As already mentioned, `Foldable` provides the ability to perform *folding* operations on any data type instantiating the
+`Foldable` type class:
+
+```haskell
+class Foldable t where
+  fold    :: Monoid m => t m -> m
+  foldMap :: Monoid m => (a -> m) -> t a -> m
+  foldr   :: (a -> b -> b) -> b -> t a -> b
+  foldr'  :: (a -> b -> b) -> b -> t a -> b
+  foldl   :: (b -> a -> b) -> b -> t a -> b
+  foldl'  :: (b -> a -> b) -> b -> t a -> b
+  foldr1  :: (a -> a -> a) -> t a -> a
+  foldl1  :: (a -> a -> a) -> t a -> a
+  toList  :: t a -> [a]
+  null    :: t a -> Bool
+  length  :: t a -> Int
+  elem    :: Eq a => a -> t a -> Bool
+  maximum :: Ord a => t a -> a
+  minimum :: Ord a => t a -> a
+  sum     :: Num a => t a -> a
+  product :: Num a => t a -> a
+```
+
+besides the abstraction of the `foldr` function, `Foldable` provides several other useful operations when dealing with
+*container*-like structures.
+
+Because of the regular structure algebraic data types it is again possible to automatically derive `Foldable` instances
+by using the `deriving` clause:
+
+```haskell
+{-# LANGUAGE DeriveFunctor, DeriveFoldable #-} -- allows automatic deriving of Functor and Foldable
+data Tree a = Leaf a | Node (Tree a) (Tree a) deriving (Eq, Show, Read, Functor, Foldable)
+```
+
+Of course, we can also implement the `foldr` function on our own:
+
+```haskell
+instance Foldable Tree where
+  foldr f acc (Leaf a)   = f a acc
+  foldr f acc (Node a b) = foldr f (foldr f acc b) a
+```
+
+We can now use `foldr` and other class methods of `Foldable`:
+
+```haskell
+statusTree :: Tree Status
+statusTree = Node (Leaf Green) (Node (Leaf Red) (Leaf Yellow))
+
+maxStatus = foldr max Green statusTree
+maxStatus' = maximum statusTree
+
+treeSize = length statusTree
+
+-- in GHCi:
+λ> foldr max Green statusTree
+Red
+λ> maximum statusTree
+Red
+λ> treeSize
+3
+λ> toList statusTree
+[Green,Red,Yellow]
+```
+
 
 ---
 ---
@@ -1323,7 +1391,7 @@ Damit lässt sich Seiteneffektfreie Programmierung realisieren ("Purity")
 
     - Hohe Abstraktion, Programme lassen sich oft wie eine deklarative Spezifikation des Algorithmus lesen
 
-    - sehr gute Testbarkeit durch "Composobility"
+    - sehr gute Testbarkeit durch "Composability"
     
         - das "ports & adapters" Beispiel: https://github.com/thma/RestaurantReservation
         
