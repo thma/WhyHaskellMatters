@@ -1291,10 +1291,11 @@ let data types instantiate `Functor`:
 data Tree a = Leaf a | Node (Tree a) (Tree a) deriving (Show, Functor)
 ```
 
+
 ---
 ---
 
-This is my scrap book (don't look at it)
+This is my zettelkasten (don't look at it)
 
 
 type classes
