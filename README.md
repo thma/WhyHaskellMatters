@@ -1,5 +1,7 @@
 # Why Haskell Matters
 
+[![Actions Status](https://github.com/thma/WhyHaskellMatters/workflows/Haskell%20CI/badge.svg)](https://github.com/thma/WhyHaskellMatters/actions)
+
 This is an early draft of  a work in progress article.
 
 > Haskell doesn't solve different problems than other languages.
