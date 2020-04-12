@@ -1465,7 +1465,26 @@ findDivRoot'''' x key map =
 ```
 
 This kind of chaining of functions in the context of a specific data type is quite common. So, it doesn't surprise us that
-there exists an even more abstract `andThen` operator that works for arbitrary 
+there exists an even more abstract `andThen` operator that works for arbitrary data types:
+
+```haskell
+(>>=) :: Monad m => m a -> (a -> m b) -> m b
+```
+
+When we compare this to the type signature of the `andThen` operator:
+
+```haskell
+andThen :: Maybe a -> (a -> Maybe b) -> Maybe b
+
+```
+ 
+we can see that both operators have the same structure.
+The only difference is that instead of the concrete type `Maybe` the signature of `(>>=)` uses a type variable `m` 
+with a `Monad` type class constraint. We can read this type signature as:
+
+For any type `m` of the type class `Monad` the operator `(>>=)` is defined as `m a -> (a -> m b) -> m b`
+
+Based on `(>>=)` we can rewrite the `findDivRoot` function as follows:
 
 ```haskell
 findDivRoot' x key map =
@@ -1473,6 +1492,19 @@ findDivRoot' x key map =
   safeDiv x y    >>= \d ->
   safeRoot d
 ```
+
+Monads are a central element of the Haskell type class ecosystem. In fact the monadic composition based on `(>>=)` is so
+frequently used that there exists some specific syntactic sugar for it. It's called the do-Notation.
+Using do-Notation `findDivRoot` looks like this:
+
+```haskell
+findDivRoot''' x key map = do
+  y <- lookup key map
+  d <- safeDiv x y
+  safeRoot d
+```
+
+
 
 ---
 ---
