@@ -1348,19 +1348,131 @@ statusTree = Node (Leaf Green) (Node (Leaf Red) (Leaf Yellow))
 maxStatus = foldr max Green statusTree
 maxStatus' = maximum statusTree
 
+-- using length from Foldable type class
 treeSize = length statusTree
 
 -- in GHCi:
 λ> foldr max Green statusTree
 Red
+-- using maximum from Foldable type class:
 λ> maximum statusTree
 Red
 λ> treeSize
 3
+-- using toList from Foldable type class:
 λ> toList statusTree
 [Green,Red,Yellow]
 ```
 
+### Maybe
+
+Now we will take the data type `Maybe` as an example to dive deeper into the more complex parts of the
+Haskell type class system.
+
+The `Maybe` type is quite simple, it can be either a null value, called `Nothing` or a value of type `a` 
+constructed by `Just a`:
+
+```haskell
+data  Maybe a  =  Nothing | Just a deriving (Eq, Ord)
+```
+
+The Maybe type is helpful in situations where certain operation *may* return a valid result or not.
+Take for instance the function `lookup` from the Haskell base library. It looks up a key in a list of
+key-value pairs. If it finds the key, the associated value `val` is returned - but wrapped in a Maybe: `Just val`.
+If it doesn't find the key, `Nothing` is returned:
+
+```haskell
+lookup :: (Eq a) => a -> [(a,b)] -> Maybe b
+lookup _key []  =  Nothing
+lookup  key ((k,val):rest)
+    | key == k  =  Just val
+    | otherwise =  lookup key rest
+```
+
+The `Maybe` type is a very simple means that helps to avoid NullPointer errors or similar issues with undefined results.
+Thus, many languages have adopted it under different names. In Java for instance, it is called `Optional`.
+
+In Haskell, it is considered good practise to use *total functions* - that is functions that have defined
+return values for all possible input values - where ever possible to avoid runtime errors.
+
+Typical examples for *partial* (i.e. non-total) functions are division and square roots.
+We can use `Maybe` to make them total:
+
+```haskell
+safeDiv :: (Eq a, Fractional a) => a -> a -> Maybe a
+safeDiv _ 0 = Nothing
+safeDiv x y = Just (x / y)
+
+safeRoot :: (Ord a, Floating a) => a -> Maybe a
+safeRoot x
+  | x < 0     = Nothing
+  | otherwise = Just (sqrt x)
+```
+
+In fact, there are alternative base libraries that don't provide any partial functions.
+
+Now let's consider a situation where we want to combine several of those functions. 
+Say for example we first want to lookup the divisor from a key-value table, then perform a
+division with it and finally compute the square root of the quotient:
+
+```haskell
+findDivRoot :: Double -> String -> [(String, Double)] -> Maybe Double
+findDivRoot x key map =
+  case lookup key map of
+      Nothing -> Nothing
+      Just y  -> case safeDiv x y of
+          Nothing -> Nothing
+          Just d  -> case safeRoot d of
+              Nothing -> Nothing
+              Just r  -> Just r
+
+-- and then in GHCi:
+λ> findDivRoot 27 "val" [("val", 3)]
+Just 3.0
+λ> findDivRoot 27 "val" [("val", 0)]
+Nothing
+λ> findDivRoot 27 "val" [("val", -3)]
+Nothing
+```
+
+In each single step we have to check for the `Nothing` case and only may proceed to the next step in the
+`Just` case.
+This kind of handling is repetitive and buries the actual intention under a lot of boilerplate code.
+As Haskell uses layout (i.e. indentation) instead of curly brackets to separate blocks the code will
+end up in what is called the *dreaded staircase*.
+
+So we are looking for a way to improve the code by abstracting away the chaining of functions that return
+`Maybe` values and providing a way to *short circuit* the `Nothing` cases.
+
+We need an operator `andThen` that takes the `Maybe` result of a first function
+application as first argument and a function as second argument that will be used in the `Just x` case and again 
+returns a `Maybe` result.
+In case that the input is `Nothing` the operator will directly return `Nothing` without any further processing.
+In case that the input is `Just x` the operator will apply the argument function `fun` to `x` and return its result:
+
+```haskell
+andThen :: Maybe a -> (a -> Maybe b) -> Maybe b
+andThen Nothing _fun = Nothing
+andThen (Just x) fun = fun x
+```
+We can then rewrite `findDivRoot` as follows:
+
+```haskell
+findDivRoot'''' x key map =
+  lookup key map `andThen` \y ->
+  safeDiv x y    `andThen` \d ->
+  safeRoot d
+```
+
+This kind of chaining of functions in the context of a specific data type is quite common. So, it doesn't surprise us that
+there exists an even more abstract `andThen` operator that works for arbitrary 
+
+```haskell
+findDivRoot' x key map =
+  lookup key map >>= \y ->
+  safeDiv x y    >>= \d ->
+  safeRoot d
+```
 
 ---
 ---
@@ -1408,12 +1520,7 @@ Damit lässt sich Seiteneffektfreie Programmierung realisieren ("Purity")
 
 ## toc for code chapters (still in german)
 
- - TypKlassen
-   - Automatic deriving
-     (Functor mit Baum Beispiel)
-     Baum mit Knoten Status dann mit map nach Severity
-
-
+- TypKlassen
 - Maybe Datentyp
     - totale Funktionen
     - Verkettung von Maybe operationen  
