@@ -15,14 +15,6 @@ programming language.
 The target audience are developers with a background in non-functional languages who are eager
 to learn about concepts of functional programming and Haskell in particular.
 
-The presentation aims to be self-contained and does not require any previous knowledge of the language.
-I will also try to keep the learning curve moderate and to limit the scope of the presentation;
-nevertheless this article is by no means a complete introduction to the language.
-
-(If you are looking for thorough tutorials have a look at [Haskell Wikibook](https://en.wikibooks.org/wiki/Haskell) or
- [Learn You a Haskell](http://www.learnyouahaskell.com/.)
-
-
 ## Table of contents
 
 - [Introduction](#introduction)
@@ -41,6 +33,7 @@ nevertheless this article is by no means a complete introduction to the language
   - [The Maybe Monad](#the-maybe-monad)
     -  [Total Functions](#total-functions)
     -  [Composition of Maybe operations](#composition-of-maybe-operations)
+  - [Purity](#purity)  
   - [Explicit side effects with the IO Monad](#explicit-side-effects-with-the-io-monad)
 
 ## Introduction
@@ -53,6 +46,13 @@ but it has been and still is quite influential in the software development commu
 
 In this article I try to explain why Haskell keeps being such an important language by presenting some
 of its most distinguishing features and detailing them with working code examples.
+
+The presentation aims to be self-contained and does not require any previous knowledge of the language.
+I will also try to keep the learning curve moderate and to limit the scope of the presentation;
+nevertheless this article is by no means a complete introduction to the language.
+
+(If you are looking for thorough tutorials have a look at [Haskell Wikibook](https://en.wikibooks.org/wiki/Haskell) or
+ [Learn You a Haskell](http://www.learnyouahaskell.com/.)
 
 Before diving directly into the technical details I'd like to first have a closer look on the reception of 
 Haskell in the software developers community:
@@ -1527,13 +1527,19 @@ value with an output value, and does nothing else. In particular,
 - it does not depend on anything other than its parameters, so when invoked in a different context or at a different 
   time with the same arguments, it will produce the same result.
   
-Purity makes it easy to reason about code, as it is so close to the mathematical calculus. 
-The properties of Haskell programs can thus often be determined with equational reasoning.
+Purity makes it easy to reason about code, as it is so close to mathematical calculus. 
+The properties of a Haskell program can thus often be determined with equational reasoning.
 
 Purity also improves testability: It is much easier to set up tests without worrying about mocks or stubs to factor out
 access to backend layers.
 
+All the functions that we have seen so far are all *pure* code that is free from side effects.
 
+So how can we achieve side effects like writing to a database or serving HTTP requests in Haskell?
+
+The Haskell language designers came up with a solution that distinguishes Haskell from most other languages:
+Side effects are always explicitly declared in the function type signature.
+In the next section we will learn how exactly this works.
 
 ### Explicit side effects with the IO Monad
 
@@ -1554,7 +1560,7 @@ catch away the `IOException`).
 
 So how can we use the result of `getLine` in a function that takes a `String` value as input parameter?
 
-We need the monadic bind operation `(>>=)` to achieve this:
+We need the monadic bind operation `(>>=)` to do this in the same as we saw in the `Maybe` monad:
 
 ```haskell
 -- convert a string to upper case
@@ -1607,9 +1613,6 @@ type classes
 - complex interfaces
 - interpreter style
 
-- Seiteneffekte müssen in Funktions signaturen explizit gemacht werden.
-D.H wenn keine Seiteneffekt angegeben ist, verhindert der Compiler, dass welche auftreten !
-Damit lässt sich Seiteneffektfreie Programmierung realisieren ("Purity")
 
 - Static and Strong typing (Es gibt kein Casting)
 - Type Inferenz. Der Compiler kann die Typ-Signaturen von Funktionen selbst ermitteln. (Eine explizite Signatur ist aber möglich und oft auch sehr hilfreich für Doku und um Klarheit über Code zu gewinnen.)
@@ -1638,8 +1641,6 @@ Damit lässt sich Seiteneffektfreie Programmierung realisieren ("Purity")
 
 
 ## toc for code chapters (still in german)
-
-- TypKlassen
        
 - static typing  
      
