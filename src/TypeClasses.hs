@@ -55,3 +55,17 @@ maxStatus = foldr max Green statusTree
 maxStatus' = maximum statusTree
 
 treeSize = length statusTree
+
+greet = do
+  putStr "Please enter your first name"
+  first <- getLine
+  putStr "Please enter your last name"
+  last <- getLine
+  putStrLn ("Hello " ++ first ++ " " ++ last)
+  
+greet' =
+  putStr "Please enter your first name" >>= \_ ->
+  getLine                               >>= \first ->
+  putStr "Please enter your last name"  >>= \_ ->
+  getLine                               >>= \last ->
+  putStrLn ("Hello " ++ first ++ " " ++ last)

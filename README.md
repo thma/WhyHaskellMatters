@@ -1364,7 +1364,7 @@ Red
 [Green,Red,Yellow]
 ```
 
-### Maybe
+### The Maybe Monad
 
 Now we will take the data type `Maybe` as an example to dive deeper into the more complex parts of the
 Haskell type class system.
@@ -1392,6 +1392,8 @@ lookup  key ((k,val):rest)
 The `Maybe` type is a very simple means that helps to avoid NullPointer errors or similar issues with undefined results.
 Thus, many languages have adopted it under different names. In Java for instance, it is called `Optional`.
 
+#### Total functions
+
 In Haskell, it is considered good practise to use *total functions* - that is functions that have defined
 return values for all possible input values - where ever possible to avoid runtime errors.
 
@@ -1410,6 +1412,8 @@ safeRoot x
 ```
 
 In fact, there are alternative base libraries that don't provide any partial functions.
+
+#### Composition of Maybe operations 
 
 Now let's consider a situation where we want to combine several of those functions. 
 Say for example we first want to lookup the divisor from a key-value table, then perform a
@@ -1445,7 +1449,7 @@ So we are looking for a way to improve the code by abstracting away the chaining
 `Maybe` values and providing a way to *short circuit* the `Nothing` cases.
 
 We need an operator `andThen` that takes the `Maybe` result of a first function
-application as first argument and a function as second argument that will be used in the `Just x` case and again 
+application as first argument, and a function as second argument that will be used in the `Just x` case and again 
 returns a `Maybe` result.
 In case that the input is `Nothing` the operator will directly return `Nothing` without any further processing.
 In case that the input is `Just x` the operator will apply the argument function `fun` to `x` and return its result:
@@ -1464,26 +1468,27 @@ findDivRoot'''' x key map =
   safeRoot d
 ```
 
+(Side note: In Java the `Optional` type has a corresponding method: [Optional.flatmap](https://docs.oracle.com/javase/8/docs/api/java/util/Optional.html#flatMap-java.util.function.Function-))
+
 This kind of chaining of functions in the context of a specific data type is quite common. So, it doesn't surprise us that
-there exists an even more abstract `andThen` operator that works for arbitrary data types:
+there exists an even more abstract `andThen` operator that works for arbitrary parameterized data types:
 
 ```haskell
 (>>=) :: Monad m => m a -> (a -> m b) -> m b
 ```
 
-When we compare this to the type signature of the `andThen` operator:
+When we compare this *bind* operator with the type signature of the `andThen` operator:
 
 ```haskell
 andThen :: Maybe a -> (a -> Maybe b) -> Maybe b
 
 ```
  
-we can see that both operators have the same structure.
-The only difference is that instead of the concrete type `Maybe` the signature of `(>>=)` uses a type variable `m` 
-with a `Monad` type class constraint. We can read this type signature as:
+we can see that both operators bear the same structure.
+The only difference is that instead of the concrete type `Maybe` the signature of `(>>=)`
+uses a type variable `m` with a `Monad` type class constraint. We can read this type signature as:
 
 For any type `m` of the type class `Monad` the operator `(>>=)` is defined as `m a -> (a -> m b) -> m b`
-
 Based on `(>>=)` we can rewrite the `findDivRoot` function as follows:
 
 ```haskell
@@ -1504,6 +1509,13 @@ findDivRoot''' x key map = do
   safeRoot d
 ```
 
+This looks quite like a sequence of statements (including variable assignments) in an imperative language.
+Due to this similarity Monads have been aptly called [programmable semicolons](http://book.realworldhaskell.org/read/monads.html#id642960)
+But as we have seen: below the syntactic sugar it's a purely functional composition!
+
+### The IO Monad
+
+The most prominent Haskell Monad is the `IO` monad. It is used to compose operations that perform I/O.
 
 
 ---
@@ -1524,8 +1536,6 @@ Damit lässt sich Seiteneffektfreie Programmierung realisieren ("Purity")
 - Type Inferenz. Der Compiler kann die Typ-Signaturen von Funktionen selbst ermitteln. (Eine explizite Signatur ist aber möglich und oft auch sehr hilfreich für Doku und um Klarheit über Code zu gewinnen.)
 
 - Eleganz: Viele Algorithmen lassen sich sehr kompakt und nah an der Problemdomäne formulieren.
-
-- Data Encapsulation durch Module
 
 - Weniger Bugs durch
 
@@ -1553,11 +1563,6 @@ Damit lässt sich Seiteneffektfreie Programmierung realisieren ("Purity")
 ## toc for code chapters (still in german)
 
 - TypKlassen
-- Maybe Datentyp
-    - totale Funktionen
-    - Verkettung von Maybe operationen  
-      (um die "dreadful Staircase" zu vermeiden)
-      => Monoidal Operations
       
  - explizite Seiten Effekte -> IO Monade
  
