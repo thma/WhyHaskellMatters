@@ -2,6 +2,7 @@ module TypeClasses where
 
 import AlgebraicDataTypes (Status (..), Severity (..), PairStatusSeverity (..), Tree (..))
 import Data.Foldable
+import Data.Char (toUpper)
 
 instance Num Char where
   a + b       = toEnum (fromEnum a + fromEnum b)
@@ -55,6 +56,19 @@ maxStatus = foldr max Green statusTree
 maxStatus' = maximum statusTree
 
 treeSize = length statusTree
+
+strToUpper :: String -> String
+strToUpper = map toUpper 
+ 
+up :: IO () 
+up = 
+  getLine >>= \str ->
+  print (strToUpper str)
+
+up' :: IO () 
+up' = do
+  str <- getLine
+  print (strToUpper str)
 
 greet = do
   putStr "Please enter your first name"

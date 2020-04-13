@@ -2,8 +2,6 @@
 
 [![Actions Status](https://github.com/thma/WhyHaskellMatters/workflows/Haskell%20CI/badge.svg)](https://github.com/thma/WhyHaskellMatters/actions)
 
-This is an early draft of  a work in progress article.
-
 > Haskell doesn't solve different problems than other languages.
 > But it solves them differently.
 > 
@@ -37,20 +35,26 @@ nevertheless this article is by no means a complete introduction to the language
 - [Declarative programming](#declarative-programming)
 - [Non-strict Evaluation](#non-strict-evaluation)
 - [Type Classes](#type-classes)
-  -[Functor and Foldable](#functor-and-foldable)
+  - [Functor and Foldable](#functor-and-foldable)
+    - [Functor](#functor)
+    - [Foldable](#foldable)
+  - [The Maybe Monad](#the-maybe-monad)
+    -  [Total Functions](#total-functions)
+    -  [Composition of Maybe operations](#composition-of-maybe-operations)
+  - [Explicit side effects with the IO Monad](#explicit-side-effects-with-the-io-monad)
 
 ## Introduction
 
-Exactly thirty years ago, on April 1st 1990, the original Haskell language report was published
-by a small group of academic researchers in the field of non-strict functional programming.
+Exactly thirty years ago, on April 1st 1990, a small group of researchers in the field of non-strict functional 
+programming published the original Haskell language report.
 
-Haskell never became one of the most popular languages in the software industry or part of the mainstream 
+Haskell never became one of the most popular languages in the software industry or part of the mainstream, 
 but it has been and still is quite influential in the software development community.
 
-In this article I want to explain why Haskell keeps to be such an important language by presenting some
+In this article I try to explain why Haskell keeps being such an important language by presenting some
 of its most distinguishing features and detailing them with working code examples.
 
-But before diving directly into the technical details I'd like to first have a closer look on the reception of 
+Before diving directly into the technical details I'd like to first have a closer look on the reception of 
 Haskell in the software developers community:
 
 ### A strange development over time
@@ -60,21 +64,21 @@ since its beginnings in the 1980ies Simon Peyton Jones speaks about the
 rather unusual life story of Haskell.
 
 First he talks about the typical life cycle of research languages. They are often created by 
-a single researcher (who is also the single user) and most of them will be abandoned 
+a single researcher (who is also the single user), and most of them will be abandoned 
 after just a few years.
 
 A more successful research language might gain some interest in a larger community 
 but will still not escape the ivory tower and typically will be given up within ten years.
 
 On the other hand we have all those popular programming languages that are quickly adopted by 
-large numbers of users and thus reach "the threshold of immortality".
+large numbers of developers and thus reach "the threshold of immortality".
 That is the base of existing code will grow so large that the language will 
 be in use for decades.
 
 A little jokingly he then depicts the sad fate of languages designed by 
 committees by flat line through zero: They simply never take off.
 
-Finally he presents a chart showing the Haskell timeline:
+Finally, he presents a chart showing the Haskell timeline:
 
 ![the haskell timeline](img/language-5.png)
 
@@ -82,10 +86,10 @@ The development shown in this chart seems rather unexpected:
 Haskell started as a research language and was even designed by a committee; 
 so in all probability it should have been abandoned long before the millennium!
 
-But instead it gained some momentum in its early years followed by a rather quiet phase during 
-the decade of OO hype (Java was released in 1995).
+Instead, it gained some momentum in its early years followed by a rather quiet phase during 
+the decade of OO hype (Java being released in 1995).
 And then again we see a continuous growth of interest since about 2005. 
-I'm writing this in early 2020 and we still see this trend!
+I'm writing this in early 2020, and we still see this trend!
 
 ### Being used versus being discussed
 
@@ -95,16 +99,16 @@ In statics that rank programming languages by actual usage Haskell is typically 
 But in statistics that instead rank languages by the volume of discussions on the internet
 Haskell typically scores much better (often in the top ten).
 
-### So why does Haskell keep to be a hot topic in the software development community?
+### So why does Haskell keep being a hot topic in the software development community?
 
 A very *short answer* might be: 
 Haskell has a number of features that are clearly different from those of most other programming languages. 
 Many of these features have proven to be powerful tools to solve basic problems of software development elegantly.
 
-Therefore over time other programming languages have adopted parts of these concepts (e.g. pattern matching or type classes).
+Therefore, over time other programming languages have adopted parts of these concepts (e.g. pattern matching or type classes).
 In discussions about such concepts the Haskell heritage is mentioned 
 and differences between the original Haskell concepts and those of other languages are discussed.
-Sometimes people are encouraged to have a closer look at the source of these concepts to get a deeper understanding of
+Sometimes people feel encouraged to have a closer look at the source of these concepts to get a deeper understanding of
 their original intentions. That's why we see a growing number of developers working in
 Python, Typescript, Scala, Rust, C++, C# or Java starting to dive into Haskell.
 
@@ -128,7 +132,7 @@ studying some of the most distinguishing features of Haskell.
 
 We'll go through this one by one:
 
-### functions can be assigned to variables exactly as any other other values
+### functions can be assigned to variables exactly as any other values
 
 Let's have a look how this looks like in Haskell. First we define some simple values:
 
@@ -1513,9 +1517,84 @@ This looks quite like a sequence of statements (including variable assignments) 
 Due to this similarity Monads have been aptly called [programmable semicolons](http://book.realworldhaskell.org/read/monads.html#id642960)
 But as we have seen: below the syntactic sugar it's a purely functional composition!
 
-### The IO Monad
+### Purity
+
+A function is called pure if it corresponds to a function in the mathematical sense: it associates each possible input 
+value with an output value, and does nothing else. In particular,
+
+- it has no side effects, that is to say, invoking it produces no observable effect other than the result it returns; 
+  it cannot also e.g. write to disk, or print to a screen.
+- it does not depend on anything other than its parameters, so when invoked in a different context or at a different 
+  time with the same arguments, it will produce the same result.
+  
+Purity makes it easy to reason about code, as it is so close to the mathematical calculus. 
+The properties of Haskell programs can thus often be determined with equational reasoning.
+
+Purity also improves testability: It is much easier to set up tests without worrying about mocks or stubs to factor out
+access to backend layers.
+
+
+
+### Explicit side effects with the IO Monad
 
 The most prominent Haskell Monad is the `IO` monad. It is used to compose operations that perform I/O.
+We'll study this with a simple example.
+
+In an imperative language, reading a String from the console simply returns a String value (e.g. `BufferedReader.readline()` in Java: 
+`public String readLine() throws IOException`).
+
+In Haskell the function `getLine` does not return a `String` value but an `IO String`: 
+
+```haskell
+getLine :: IO String
+```
+This could be interpreted as: `getLine` returns a String in an IO context. 
+In Haskell, it is not possible to extract the String value from its IO context (In Java on the other hand you could always 
+catch away the `IOException`).
+
+So how can we use the result of `getLine` in a function that takes a `String` value as input parameter?
+
+We need the monadic bind operation `(>>=)` to achieve this:
+
+```haskell
+-- convert a string to upper case
+strToUpper :: String -> String
+strToUpper = map toUpper 
+ 
+up :: IO () 
+up = 
+  getLine >>= \str ->
+  print (strToUpper str)
+
+λ> :t print
+print :: Show a => a -> IO ()
+λ> up
+hello world
+"HELLO WORLD"
+```
+
+or with do-Notation:
+```haskell
+up' :: IO () 
+up' = do
+  str <- getLine
+  print (strToUpper str)
+```
+
+Making side effects explicit in function type signatures is one of the most outstanding achievements of Haskell.
+This feature will lead to a very clear distinction between code that is free of side effects (aka *pure* code) and code 
+that has side effects (aka *impure* code).
+
+Keeping domain logic *pure* - particularly when working only with *total* functions - will dramatically improve 
+reliability and testability as tests can be run without setting up mocks or real backends.
+
+It's not possible to introduce side effects without making them explicit in type signatures. 
+There is nothing like the *invisible* Java `RuntimeExceptions`. 
+So you can rely on the compiler to detect any violations of a rule like "No impure code in domain logic".
+
+I've written a very simple Restaurant Booking Service that explains how Haskell helps you to keep domain logic pure by
+organizing your code according to the [ports and adapters pattern](https://github.com/thma/RestaurantReservation).
+
 
 
 ---
@@ -1546,9 +1625,7 @@ Damit lässt sich Seiteneffektfreie Programmierung realisieren ("Purity")
     - Hohe Abstraktion, Programme lassen sich oft wie eine deklarative Spezifikation des Algorithmus lesen
 
     - sehr gute Testbarkeit durch "Composability"
-    
-        - das "ports & adapters" Beispiel: https://github.com/thma/RestaurantReservation
-        
+            
         - TDD / DDD
     
     - Memory Management (sehr schneller GC)
@@ -1563,9 +1640,7 @@ Damit lässt sich Seiteneffektfreie Programmierung realisieren ("Purity")
 ## toc for code chapters (still in german)
 
 - TypKlassen
-      
- - explizite Seiten Effekte -> IO Monade
- 
+       
 - static typing  
      
 - Testbarkeit
