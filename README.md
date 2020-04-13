@@ -19,14 +19,28 @@ to learn about concepts of functional programming and Haskell in particular.
 
 - [Introduction](#introduction)
 - [Functions are first class](#functions-are-first-class)
+  - [Functions can be assigned to variables exactly as any other values](#functions-can-be-assigned-to-variables-exactly-as-any-other-values)
+  - [Support for anonymous functions](#support-for-anonymous-functions)
+  - [Functions can be returned as values from other functions](#functions-can-be-returned-as-values-from-other-functions)
+    - [Function composition](#function-composition)
+    - [Currying and Partial Application](#currying-and-Partial-Application)
+  - [Functions can be passed as arguments to other functions](#functions-can-be-passed-as-arguments-to-other-functions)
 - [Pattern matching](#pattern-matching)
 - [Algebraic Data Types](#algebraic-data-types)
 - [Polymorphic Data Types](#polymorphic-data-types)
   - [Lists](#lists)
+    - [Arithmetic sequences](#arithmetic-sequences)
 - [Immutability](#immutability)
 - [Declarative programming](#declarative-programming)
+  - [Mapping](#mapping)
+  - [Folding](#folding)
 - [Non-strict Evaluation](#non-strict-evaluation)
+  - [Avoid endless loops](#avoid-endless-loops)
+  - [Define potentially infinite data structures](#define-potentially-infinite-data-structures)
+  - [List comprehension](#list-comprehension)
+  - [Define control flow structures as abstractions](#define-control-flow-structures-as-abstractions)
 - [Type Classes](#type-classes)
+  - [Read and Show](#read-and-show)
   - [Functor and Foldable](#functor-and-foldable)
     - [Functor](#functor)
     - [Foldable](#foldable)
@@ -35,6 +49,7 @@ to learn about concepts of functional programming and Haskell in particular.
     -  [Composition of Maybe operations](#composition-of-maybe-operations)
   - [Purity](#purity)  
   - [Explicit side effects with the IO Monad](#explicit-side-effects-with-the-io-monad)
+- [Conclusion](#conclusion)
 
 ## Introduction
 
@@ -132,7 +147,7 @@ studying some of the most distinguishing features of Haskell.
 
 We'll go through this one by one:
 
-### functions can be assigned to variables exactly as any other values
+### Functions can be assigned to variables exactly as any other values
 
 Let's have a look how this looks like in Haskell. First we define some simple values:
 
@@ -168,7 +183,7 @@ double :: Integer -> Integer
 double n = 2 * n
 ```
 
-### support for anonymous functions
+### Support for anonymous functions
 
 Anonymous functions, also known as lambda expressions, can be defined in Haskell like this:
 
@@ -194,7 +209,7 @@ We will see more useful applications of anonymous functions in the following sec
 
 ### Functions can be returned as values from other functions
 
-#### function composition
+#### Function composition
 
 Do you remember *function composition* from your high-school math classes? 
 Function composition is an operation that takes two functions `f` and `g` and produces a function `h` such that 
@@ -692,8 +707,10 @@ factor out many basic control structures and algorithms from the user code.
 This will result in a more *declarative programming* style where the developer can simply 
 declare *what* she wants to achieve but is not required to write down *how* it is to be achieved.
 
-Code that applies this style will be much denser and it will be more concerned with the actual elements
+Code that applies this style will be much denser, and it will be more concerned with the actual elements
 of the problem domain than with the technical implementation details.
+
+### Mapping
 
 We'll demonstrate this with some examples working on lists. 
 First we get the task to write a function that doubles all elements of a `[Integer]` list.
@@ -744,7 +761,7 @@ squareAll' :: [Integer] -> [Integer]
 squareAll' = map square
 ```
 
-### folding or reducing
+### Folding
 
 Now let's have a look at some related problem.
 Our first task is to add up all elements of a  `[Integer]` list.
@@ -826,7 +843,7 @@ The real-world benefits of lazy evaluation include:
 
 So let's have a closer look at those benefits:
 
-### Avoid endless loops in certain edge cases
+### Avoid endless loops
 
 Consider the following example function:
 
@@ -946,7 +963,7 @@ pt = [(a,b,c) | c <- [1..],
                 a^2 + b^2 == c^2]
 ```
 
-### define control flow structures as abstractions instead of primitives
+### Define control flow structures as abstractions
 
 In most languages it is not possible to define new conditional operations, e.g. your own `myIf` statement.
 A conditional operation will evaluate some of its arguments only if certain conditions are met.
@@ -1217,8 +1234,6 @@ Together `show` and `read` provide a convenient way to serialize (marshal) and d
 data structures.
 This mechanism does not provide any optimized binary representation, but it is still good enough for
 many practical purposes, the format is more compact than JSON, and it does not require a parser library.
-
-
 
 ### Functor and Foldable
 
@@ -1601,7 +1616,7 @@ So you can rely on the compiler to detect any violations of a rule like "No impu
 I've written a very simple Restaurant Booking Service that explains how Haskell helps you to keep domain logic pure by
 organizing your code according to the [ports and adapters pattern](https://github.com/thma/RestaurantReservation).
 
-
+## Conclusion
 
 ---
 ---
