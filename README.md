@@ -9,8 +9,10 @@
 
 ## Abstract
 
-In this article I'm presenting some of the most important and distinguishing features of the Haskell
-programming language.
+In this article I try to explain why Haskell keeps being such an important language by presenting some
+of its most important and distinguishing features and detailing them with working code examples.
+
+The presentation aims to be self-contained and does not require any previous knowledge of the language.
 
 The target audience are developers with a background in non-functional languages who are eager
 to learn about concepts of functional programming and Haskell in particular.
@@ -1458,11 +1460,15 @@ Nothing
 Nothing
 ```
 
-In each single step we have to check for the `Nothing` case and only may proceed to the next step in the
-`Just` case.
-This kind of handling is repetitive and buries the actual intention under a lot of boilerplate code.
+The resulting control flow is depicted in the following diagram:
+![The Maybe railroad](img/maybe.png)
+
+In each single step we have to check for `Nothing`, in that case we directly short circuit to an overall `Nothing` result value.
+In the `Just` case we proceed to the next processing step.
+
+This kind of handling is repetitive and buries the actual intention under a lot of boilerplate.
 As Haskell uses layout (i.e. indentation) instead of curly brackets to separate blocks the code will
-end up in what is called the *dreaded staircase*.
+end up in what is called the *dreaded staircase*: it maches to the right of the screen.
 
 So we are looking for a way to improve the code by abstracting away the chaining of functions that return
 `Maybe` values and providing a way to *short circuit* the `Nothing` cases.
@@ -1478,6 +1484,7 @@ andThen :: Maybe a -> (a -> Maybe b) -> Maybe b
 andThen Nothing _fun = Nothing
 andThen (Just x) fun = fun x
 ```
+
 We can then rewrite `findDivRoot` as follows:
 
 ```haskell
@@ -1618,47 +1625,4 @@ organizing your code according to the [ports and adapters pattern](https://githu
 
 ## Conclusion
 
----
----
-
-This is my zettelkasten (don't look at it)
-
-
-type classes
-- complex interfaces
-- interpreter style
-
-
-- Static and Strong typing (Es gibt kein Casting)
-- Type Inferenz. Der Compiler kann die Typ-Signaturen von Funktionen selbst ermitteln. (Eine explizite Signatur ist aber möglich und oft auch sehr hilfreich für Doku und um Klarheit über Code zu gewinnen.)
-
-- Eleganz: Viele Algorithmen lassen sich sehr kompakt und nah an der Problemdomäne formulieren.
-
-- Weniger Bugs durch
-
-    - Purity, keine Seiteneffekte
-
-    - Starke typisierung. Keine NPEs !
-
-    - Hohe Abstraktion, Programme lassen sich oft wie eine deklarative Spezifikation des Algorithmus lesen
-
-    - sehr gute Testbarkeit durch "Composability"
-            
-        - TDD / DDD
-    
-    - Memory Management (sehr schneller GC)
-
-    - Modulare Programme. Es gibt ein sehr einfaches aber effektive Modul System und eine grosse Vielzahl kuratierter Bibliotheken.
-
-    ("Ich habe in 5 Jahre Haskell noch nicht ein einziges Mal debuggen müssen")
-
-- Performance: keine VM, sondern sehr optimierter Maschinencode. Mit ein wenig Feinschliff lassen sich oft Geschwindigkeiten wie bei handoptimiertem C-Code erreichen. 
-
-
-## toc for code chapters (still in german)
-       
-- static typing  
-     
-- Testbarkeit
-    - TDD, higher order functions assembly, Typklassen dispatch (https://jproyo.github.io/posts/2019-03-17-tagless-final-haskell.html)
-    
+tbd.
