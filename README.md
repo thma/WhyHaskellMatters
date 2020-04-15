@@ -680,7 +680,8 @@ fac' n   = prod [1..n]
 
 This is going to be a very short section. In Haskell all data is immutable. Period.
 
-Let's look at some interactions with the Haskell GHCi REPL:
+Let's look at some interactions with the Haskell GHCi REPL (whenever you see the `λ>` prompt in this article 
+it is from a GHCi session):
 
 ```haskell
 λ> a = [1,2,3]
@@ -1186,6 +1187,26 @@ data PairStatusSeverity = PSS Status Severity deriving (Eq)
 
 This automatic deriving of type class instances works for many cases and reduces a lof of repetitive code.
 
+For example, its possible to automatically derive instances of the `Ord` type class, which provides
+ordering functionality:
+
+```haskell
+class  (Eq a) => Ord a  where
+    compare              :: a -> a -> Ordering
+    (<), (<=), (>), (>=) :: a -> a -> Bool
+    max, min             :: a -> a -> a
+    ...
+```
+
+If you are using `deriving` for the `Status` and `Severity` types, the Compiler will implement the
+ordering according to the ordering of the constructors in the type declaration.
+That is `Green < Yellow < Red` and `Low < Middle < High`:
+
+```haskell
+data Status   = Green | Yellow | Red          deriving (Eq, Ord)
+data Severity = Low | Middle | High           deriving (Eq, Ord)
+```
+
 ### Read and Show
 
 Two other quite useful type classes are `Read` and `Show` that also support automatic deriving. 
@@ -1373,6 +1394,9 @@ maxStatus' = maximum statusTree
 treeSize = length statusTree
 
 -- in GHCi:
+λ> :t max
+max :: Ord a => a -> a -> a
+
 λ> foldr max Green statusTree
 Red
 -- using maximum from Foldable type class:
@@ -1468,7 +1492,7 @@ In the `Just` case we proceed to the next processing step.
 
 This kind of handling is repetitive and buries the actual intention under a lot of boilerplate.
 As Haskell uses layout (i.e. indentation) instead of curly brackets to separate blocks the code will
-end up in what is called the *dreaded staircase*: it maches to the right of the screen.
+end up in what is called the *dreaded staircase*: it marches to the right of the screen.
 
 So we are looking for a way to improve the code by abstracting away the chaining of functions that return
 `Maybe` values and providing a way to *short circuit* the `Nothing` cases.
@@ -1565,6 +1589,11 @@ In the next section we will learn how exactly this works.
 
 ### Explicit side effects with the IO Monad
 
+> Monadic I/O is a clever trick for encapsulating sequential, imperative computation, so that it can “do no evil” 
+> to the part that really does have precise semantics and good compositional properties.
+>
+> [Conal Elliott](http://conal.net/blog/posts/is-haskell-a-purely-functional-language)
+
 The most prominent Haskell Monad is the `IO` monad. It is used to compose operations that perform I/O.
 We'll study this with a simple example.
 
@@ -1582,7 +1611,7 @@ catch away the `IOException`).
 
 So how can we use the result of `getLine` in a function that takes a `String` value as input parameter?
 
-We need the monadic bind operation `(>>=)` to do this in the same as we saw in the `Maybe` monad:
+We need the monadic bind operation `(>>=)` to do this in the same as we already saw in the `Maybe` monad:
 
 ```haskell
 -- convert a string to upper case
@@ -1594,6 +1623,7 @@ up =
   getLine >>= \str ->
   print (strToUpper str)
 
+-- and then in GHCi:
 λ> :t print
 print :: Show a => a -> IO ()
 λ> up
@@ -1610,19 +1640,48 @@ up' = do
 ```
 
 Making side effects explicit in function type signatures is one of the most outstanding achievements of Haskell.
-This feature will lead to a very clear distinction between code that is free of side effects (aka *pure* code) and code 
+This feature will lead to a very rigid distinction between code that is free of side effects (aka *pure* code) and code 
 that has side effects (aka *impure* code).
 
 Keeping domain logic *pure* - particularly when working only with *total* functions - will dramatically improve 
-reliability and testability as tests can be run without setting up mocks or real backends.
+reliability and testability as tests can be run without setting up mocks or stubbed backends.
 
 It's not possible to introduce side effects without making them explicit in type signatures. 
 There is nothing like the *invisible* Java `RuntimeExceptions`. 
 So you can rely on the compiler to detect any violations of a rule like "No impure code in domain logic".
 
-I've written a very simple Restaurant Booking Service that explains how Haskell helps you to keep domain logic pure by
+I've written a simple Restaurant Booking REST Service API that explains how Haskell helps you to keep domain logic pure by
 organizing your code according to the [ports and adapters pattern](https://github.com/thma/RestaurantReservation).
+
+The section on type classes (and on Monads in particular) have been quite lengthy. Yet, they have hardly shown more than
+the tip of the iceberg. If you want to dive deeper into type classes, I recommend 
+[The Typeclassopedia](https://wiki.haskell.org/Typeclassopedia).
 
 ## Conclusion
 
-tbd.
+We have covered quite a bit of terrain in the course of this article.
+
+It may seem that Haskell has invented an intimidating mass of non-mainstream concepts.
+But in fact, Haskell inherits much from earlier functional programming languages.
+
+Features like first class functions, comprehensive list api or declarative programming
+had already been introduced with Lisp and Scheme.
+
+Several others like pattern matching, non-strict evaluation, immutability, purity, static and strong typing,
+type inference, algebraic data types and polymorphic data types
+have been invented in languages like Hope, Miranda an ML.
+
+Only a few features like type classes and explicit side effects / monadic I/O have first been introduced in Haskell.
+
+So if you already know some functional languages, Haskell will not be to alien to you.
+For developers with a background in OO languages, the conceptual gap will be much larger.
+
+I hope that this article helped to bridge that gap a bit and to better explain [why 
+functional programming](https://www.cs.kent.ac.uk/people/staff/dat/miranda/whyfp90.pdf) - and Haskell in particular - matters.
+
+Using functional programming languages - or applying some of the techniques shown above - will help
+to create designs that are closer to the problem domain (as intented by domain driven design), 
+more readable (due to their declarative character), allow equational reasoning, 
+are more flexible for future changes or extensions, provide better testability (supporting BDD, TDD and property based testing), 
+will need much less debugging, are better to maintain and, last not least, will be more fun to write.
+
