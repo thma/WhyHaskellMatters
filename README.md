@@ -14,7 +14,7 @@ of its most important and distinguishing features and detailing them with workin
 
 The presentation aims to be self-contained and does not require any previous knowledge of the language.
 
-The target audience are developers with a background in non-functional languages who are eager
+The target audience are Haskell freshmen and developers with a background in non-functional languages who are eager
 to learn about concepts of functional programming and Haskell in particular.
 
 ## Table of contents
