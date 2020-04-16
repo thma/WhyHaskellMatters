@@ -1575,6 +1575,7 @@ value with an output value, and does nothing else. In particular,
   
 Purity makes it easy to reason about code, as it is so close to mathematical calculus. 
 The properties of a Haskell program can thus often be determined with equational reasoning.
+(As an example I have provided an [example for equational reasoning in Haskell](functor-proof.md).
 
 Purity also improves testability: It is much easier to set up tests without worrying about mocks or stubs to factor out
 access to backend layers.
