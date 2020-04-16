@@ -329,8 +329,7 @@ The Haskell code is straightforward: new ingredients are the `if ... then ... el
 odd `odd` which is a predicate from the Haskell standard library 
 that returns `True` if an integral number is odd.
 
-Now let's assume that we also need another function that computes the square for any odd number.
-As you can imagine we can use the standard library predicate `even`: 
+Now let's assume that we also need another function that computes the square for any odd number:
 
 ```haskell
 ifOddSquare :: Integer -> Integer
