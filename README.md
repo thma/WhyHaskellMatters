@@ -167,6 +167,18 @@ In the first line we see a type signature that defines the constant `aNumber` to
 In the second line we define the value of `aNumber` to be `42`.
 In the same way we define the constant `aString` to be of type `String`.
 
+Haskell is a statically typed language: all type checks happen at compile time.
+Static typing has the advantage that type errors don't happen at runtime. 
+This is especially useful if a function signature is changed and this change 
+affects many dependent parts of a project: the compiler will detect the breaking changes
+at all affected places.
+
+The Haskell Compiler also provides *type inference*, which allows the compiler to deduce the concrete data type
+of an expression from the context.
+Thus, it is usually not required to provide type declarations. 
+Nevertheless, using explicit type signatures is considered good style as they are an important element of a 
+comprehensive documentation.
+
 Next we define a function `square` that takes an integer argument and returns the square value of the argument:
 ```Haskell
 square :: Integer -> Integer
@@ -1662,13 +1674,13 @@ the tip of the iceberg. If you want to dive deeper into type classes, I recommen
 
 We have covered quite a bit of terrain in the course of this article.
 
-It may seem that Haskell has invented an intimidating mass of non-mainstream concepts.
+It may seem that Haskell has invented an intimidating mass of programming concepts.
 But in fact, Haskell inherits much from earlier functional programming languages.
 
-Features like first class functions, comprehensive list api or declarative programming
+Features like first class functions, comprehensive list APIs or declarative programming
 had already been introduced with Lisp and Scheme.
 
-Several others like pattern matching, non-strict evaluation, immutability, purity, static and strong typing,
+Several others, like pattern matching, non-strict evaluation, immutability, purity, static and strong typing,
 type inference, algebraic data types and polymorphic data types
 have been invented in languages like Hope, Miranda an ML.
 
@@ -1680,9 +1692,10 @@ For developers with a background in OO languages, the conceptual gap will be muc
 I hope that this article helped to bridge that gap a bit and to better explain [why 
 functional programming](https://www.cs.kent.ac.uk/people/staff/dat/miranda/whyfp90.pdf) - and Haskell in particular - matters.
 
-Using functional programming languages - or applying some of the techniques shown above - will help
+Using functional programming languages - or applying some of its techniques - will help
 to create designs that are closer to the problem domain (as intented by domain driven design), 
-more readable (due to their declarative character), allow equational reasoning, 
+more readable (due to their declarative character), allow equational reasoning, will provide more rigid
+separation of business logic and side effects,
 are more flexible for future changes or extensions, provide better testability (supporting BDD, TDD and property based testing), 
 will need much less debugging, are better to maintain and, last not least, will be more fun to write.
 
