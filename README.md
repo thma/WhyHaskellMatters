@@ -1572,7 +1572,7 @@ findDivRoot''' x key map = do
 ```
 
 This looks quite like a sequence of statements (including variable assignments) in an imperative language.
-Due to this similarity Monads have been aptly called [programmable semicolons](http://book.realworldhaskell.org/read/monads.html#id642960)
+Due to this similarity Monads have been aptly called [programmable semicolons](http://book.realworldhaskell.org/read/monads.html#id642960).
 But as we have seen: below the syntactic sugar it's a purely functional composition!
 
 ### Purity
