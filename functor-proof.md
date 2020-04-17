@@ -1,8 +1,13 @@
 # Proof of functor laws for Maybe
 
+In this section I want to give a short example of how equational reasoning can be used to
+proof certain properties of a given piece of code in Haskell.
 
-**Facts:**
-This is the `Functor` instance declaration of the type `Maybe`:
+So without further ado let's begin:
+
+## Known facts
+
+The `Functor` instance declaration of the type `Maybe` is defined as:
 
 ```haskell
 instance  Functor Maybe  where
@@ -10,20 +15,21 @@ instance  Functor Maybe  where
     fmap f (Just a)      = Just (f a)    -- (2)
 ```
 
-This is the declaration of the composition operator `(.)`:
+The composition operator `(.)` is defined as:
 ```haskell
 (.) :: (b -> c) -> (a -> b) -> a -> c
-f . g x = f (g x)                       -- (3)
+f . g x = f (g x)                        -- (3)
 ```
 
-This is the definition of the Identity function `id`:
+The Identity function `id` is defined as:
 ```haskell
 id :: a -> a
-id x =  x                               -- (4)
+id x =  x                                -- (4)
 ```
 
+## Claim
 
-Now we are asked to proof that `Maybe` fulfils the functor laws:
+The claim is that `Maybe` fulfils the two functor laws:
  
 ```haskell
 1.: fmap id = id
@@ -65,7 +71,7 @@ Therefore, `fmap id m = id m` in all cases.∎
 ```haskell
 fmap (f . g) m      = fmap (f . g) Nothing    -- by expansion of m
                     = Nothing                 -- by applying equation (1)
-(fmap f . fmap g) m = fmap f (fmap g Nothing) -- by expansion of (.) and m
+(fmap f . fmap g) m = fmap f (fmap g Nothing) -- by applying equation (4) and expanding m
                     = fmap f Nothing          -- by applying equation (1)
                     = Nothing                 -- by applying equation (1)
 ```
@@ -75,9 +81,15 @@ fmap (f . g) m      = fmap (f . g) Nothing    -- by expansion of m
 ```haskell
 fmap (f . g) m      = fmap (f . g) (Just a)    -- by expansion of m
                     = Just ((f . g) a)         -- by applying equation (2)
-(fmap f . fmap g) m = fmap f (fmap g (Just a)) -- by expansion of (.), m
+(fmap f . fmap g) m = fmap f (fmap g (Just a)) -- by applying equation (4) and expanding m
                     = fmap f (Just (g a))      -- by applying equation (2)
                     = Just (f (g a)            -- by applying equation (2)
                     = Just ((f . g) a)         -- by applying equation (3)
 ```
 Therefore, `fmap (f . g) m = (fmap f . fmap g) m` in all cases. ∎
+
+## Conclusion
+
+You'll see this kind of reasoning quite a lot in Haskell documentation and online discussions.
+The simple reason is: if you can prove something you don't have to test it.
+
