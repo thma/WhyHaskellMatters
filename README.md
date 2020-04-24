@@ -112,7 +112,7 @@ I'm writing this in early 2020, and we still see this trend!
 
 Then Simon Peyton Jones points out another interesting characteristic of the reception of Haskell 
 in recent years:
-In statics that rank programming languages by actual usage Haskell is typically not under the 30 most active languages.
+In statistics that rank programming languages by actual usage Haskell is typically not under the 30 most active languages.
 But in statistics that instead rank languages by the volume of discussions on the internet
 Haskell typically scores much better (often in the top ten).
 
@@ -446,7 +446,7 @@ We'll see some more examples shortly.
 
 ## Algebraic Data Types
 
-Haskell supports user-defined data types by making use of a very thought out concept.
+Haskell supports user-defined data types by making use of a well thought out concept.
 Let's start with a simple example:
 
 ```haskell
@@ -705,13 +705,13 @@ it is from a GHCi session):
 ```
 
 In Haskell there is no way to change the value of `a` after its initial creation. There are no *destructive* 
-operations available as in some other functional languages like Lisp, Scheme or ML.
+operations available unlike some other functional languages such as Lisp, Scheme or ML.
 
-The huge benefit of this is that refactorings become much simpler as in languages where every function or method
-might mutate data. Thus it will also be more easy to reason about a given piece of code.
+The huge benefit of this is that refactoring becomes much simpler than in languages where every function or method
+might mutate data. Thus it will also be easier to reason about a given piece of code.
 
 Of course this also makes programming of concurrent operations much easier. With a *shared nothing* approach, 
-Haskell programs will automatically be thread-safe.
+Haskell programs are automatically thread-safe.
 
 ## Declarative programming
 
@@ -730,7 +730,7 @@ We'll demonstrate this with some examples working on lists.
 First we get the task to write a function that doubles all elements of a `[Integer]` list.
 We want to reuse the `double` function we have already defined above.
 
-With all that we have learnt so far writing a function `doubleAll` isn't that hard:
+With all that we have learnt so far, writing a function `doubleAll` isn't that hard:
 
 ```haskell
 -- compute the double value for all list elements
@@ -830,7 +830,7 @@ many situation where list data has to be processed.
 Both functions can even be composed to form yet another very important programming concept: *Map/Reduce*.
 In Haskell this operation is provided by the function `foldMap`.
 
-I won't go into details here as it would go beyond the scope of this article. But I'll invite you to read my 
+I won't go into details here as it would go beyond the scope of this article, but I'll invite you to read my 
 [introduction to Map/Reduce in Haskell](https://github.com/thma/LtuPatternFactory#map-reduce).
 
 ## Non-strict Evaluation
@@ -965,7 +965,7 @@ close to the original mathematical definitions.
 
 Take for example the set `PT` of all pythagorean triples
 
->  PT = {(a,b,c) | a,b,c ∊ ℕ ∧ a² + b² = c² }
+>  PT = { (a,b,c) | a,b,c ∊ ℕ ∧ a² + b² = c² }
 
 The Haskell definition looks like this:
 
@@ -1124,12 +1124,12 @@ Here comes a graphic overview of some of the most important type classes in the 
 
 ![The hierarchy of basic type classes](https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Base-classes.svg/510px-Base-classes.svg.png)
 
-I won't go all of these but I I'll cover some of the most important ones.
+I won't go over all of these but I'll cover some of the most important ones.
  
 Let's start with Eq:
 
 ```haskell
-class  Eq a  where
+class Eq a where
    (==), (/=) :: a -> a -> Bool
 
        -- Minimal complete definition:
@@ -1202,7 +1202,7 @@ For example, its possible to automatically derive instances of the `Ord` type cl
 ordering functionality:
 
 ```haskell
-class  (Eq a) => Ord a  where
+class (Eq a) => Ord a where
     compare              :: a -> a -> Ordering
     (<), (<=), (>), (>=) :: a -> a -> Bool
     max, min             :: a -> a -> a
@@ -1260,7 +1260,7 @@ PSS Green Low
 
 Please note that it is required to specify the expected target type with the `:: PairStatusSeverity` clause.
 Haskell uses static compile time typing. At compile time there is no way to determine which type
-an expression `read "some string content"` will return. Thus expected type must be specified at compile time.
+an expression `read "some string content"` will return. Thus the expected type must be specified at compile time.
 Either by an implicit declaration given by some function type signature, or as in the example above,
 by an explicit declaration.
 
@@ -1272,23 +1272,21 @@ many practical purposes, the format is more compact than JSON, and it does not r
 ### Functor and Foldable
 
 The most interesting type classes are those derived from abstract algebra or category theory.
-Studying them is a very rewarding process that I'm highly recommending. However, it is definitely
-beyond the scope of the present article. Thus, I'm only pointing to two resources covering this part of the Haskell
+Studying them is a very rewarding process that I highly recommend. However, it is definitely
+beyond the scope of this article. Thus, I'm only pointing to two resources covering this part of the Haskell
 type class hierarchy.
 The first one is the legendary [Typeclassopedia](https://wiki.haskell.org/Typeclassopedia) by Brent Yorgey. 
 The second one is [Lambda the ultimate Pattern Factory](https://github.com/thma/LtuPatternFactory)  by myself. 
-This text is relating the algebraic type classes to software design patterns.
+This text relates the algebraic type classes to software design patterns, and therefore we will only cover some of these type classes.
 
-So we will only cover some of these type classes.
+In the section on [declarative programming](#declarative-programming) we came across two very useful concepts:
 
-In the section on [declarative programming](#declarative-programming) we came across to very useful concepts:
-
-- mapping a function over all elements of a list (`map :: (a -> b) -> [a] -> [b]`)
+- mapping a function over all elements in a list (`map :: (a -> b) -> [a] -> [b]`)
 - reducing a list with a binary operation and the neutral (identity) element of that operation 
   (`foldr :: (a -> b -> b) -> b -> [a] -> b`)
 
 These concepts are not only useful for lists, but also for many other data structures. So it doesn't come as a
-surprise that there type classes that abstract these concepts.
+surprise that there are type classes that abstract these concepts.
 
 #### Functor
 
@@ -1300,7 +1298,7 @@ class Functor f where
   fmap :: (a -> b) -> f a -> f b
 ```
 
-Let's a closer look at this idea by playing with a simple binary tree:
+Let's take a closer look at this idea by playing with a simple binary tree:
 
 ```haskell
 data Tree a = Leaf a | Node (Tree a) (Tree a) deriving (Show)
@@ -1432,7 +1430,7 @@ constructed by `Just a`:
 data  Maybe a  =  Nothing | Just a deriving (Eq, Ord)
 ```
 
-The Maybe type is helpful in situations where certain operation *may* return a valid result or not.
+The Maybe type is helpful in situations where certain operation *may* return a valid result.
 Take for instance the function `lookup` from the Haskell base library. It looks up a key in a list of
 key-value pairs. If it finds the key, the associated value `val` is returned - but wrapped in a Maybe: `Just val`.
 If it doesn't find the key, `Nothing` is returned:
@@ -1445,7 +1443,7 @@ lookup  key ((k,val):rest)
     | otherwise =  lookup key rest
 ```
 
-The `Maybe` type is a very simple means that helps to avoid NullPointer errors or similar issues with undefined results.
+The `Maybe` type is a simple way to avoid NullPointer errors or similar issues with undefined results.
 Thus, many languages have adopted it under different names. In Java for instance, it is called `Optional`.
 
 #### Total functions
@@ -1545,7 +1543,7 @@ andThen :: Maybe a -> (a -> Maybe b) -> Maybe b
 
 ```
  
-we can see that both operators bear the same structure.
+We can see that both operators bear the same structure.
 The only difference is that instead of the concrete type `Maybe` the signature of `(>>=)`
 uses a type variable `m` with a `Monad` type class constraint. We can read this type signature as:
 
@@ -1586,7 +1584,7 @@ value with an output value, and does nothing else. In particular,
   
 Purity makes it easy to reason about code, as it is so close to mathematical calculus. 
 The properties of a Haskell program can thus often be determined with equational reasoning.
-(As an example I have provided an [example for equational reasoning in Haskell](functor-proof.md).
+(As an example I have provided an [example for equational reasoning in Haskell](functor-proof.md)).
 
 Purity also improves testability: It is much easier to set up tests without worrying about mocks or stubs to factor out
 access to backend layers.
@@ -1681,20 +1679,20 @@ had already been introduced with Lisp and Scheme.
 
 Several others, like pattern matching, non-strict evaluation, immutability, purity, static and strong typing,
 type inference, algebraic data types and polymorphic data types
-have been invented in languages like Hope, Miranda an ML.
+have been invented in languages like Hope, Miranda and ML.
 
-Only a few features like type classes and explicit side effects / monadic I/O have first been introduced in Haskell.
+Only a few features like type classes and explicit side effects / monadic I/O were first introduced in Haskell.
 
-So if you already know some functional languages, Haskell will not be to alien to you.
+So if you already know some functional language concepts, Haskell shouldn't seem too alien to you.
 For developers with a background in OO languages, the conceptual gap will be much larger.
 
 I hope that this article helped to bridge that gap a bit and to better explain [why 
 functional programming](https://www.cs.kent.ac.uk/people/staff/dat/miranda/whyfp90.pdf) - and Haskell in particular - matters.
 
-Using functional programming languages - or applying some of its techniques - will help
+Using functional programming languages - or applying some of their techniques - will help
 to create designs that are closer to the problem domain (as intented by domain driven design), 
 more readable (due to their declarative character), allow equational reasoning, will provide more rigid
 separation of business logic and side effects,
 are more flexible for future changes or extensions, provide better testability (supporting BDD, TDD and property based testing), 
-will need much less debugging, are better to maintain and, last not least, will be more fun to write.
+will need much less debugging, are better to maintain and, last but not least, will be more fun to write.
 
