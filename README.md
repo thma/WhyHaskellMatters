@@ -1543,7 +1543,7 @@ andThen :: Maybe a -> (a -> Maybe b) -> Maybe b
 
 ```
  
-we can see that both operators bear the same structure.
+We can see that both operators bear the same structure.
 The only difference is that instead of the concrete type `Maybe` the signature of `(>>=)`
 uses a type variable `m` with a `Monad` type class constraint. We can read this type signature as:
 
@@ -1584,7 +1584,7 @@ value with an output value, and does nothing else. In particular,
   
 Purity makes it easy to reason about code, as it is so close to mathematical calculus. 
 The properties of a Haskell program can thus often be determined with equational reasoning.
-(As an example I have provided an [example for equational reasoning in Haskell](functor-proof.md).
+(As an example I have provided an [example for equational reasoning in Haskell](functor-proof.md)).
 
 Purity also improves testability: It is much easier to set up tests without worrying about mocks or stubs to factor out
 access to backend layers.
@@ -1679,20 +1679,20 @@ had already been introduced with Lisp and Scheme.
 
 Several others, like pattern matching, non-strict evaluation, immutability, purity, static and strong typing,
 type inference, algebraic data types and polymorphic data types
-have been invented in languages like Hope, Miranda an ML.
+have been invented in languages like Hope, Miranda and ML.
 
-Only a few features like type classes and explicit side effects / monadic I/O have first been introduced in Haskell.
+Only a few features like type classes and explicit side effects / monadic I/O were first introduced in Haskell.
 
-So if you already know some functional languages, Haskell will not be to alien to you.
+So if you already know some functional language concepts, Haskell shouldn't seem too alien to you.
 For developers with a background in OO languages, the conceptual gap will be much larger.
 
 I hope that this article helped to bridge that gap a bit and to better explain [why 
 functional programming](https://www.cs.kent.ac.uk/people/staff/dat/miranda/whyfp90.pdf) - and Haskell in particular - matters.
 
-Using functional programming languages - or applying some of its techniques - will help
+Using functional programming languages - or applying some of their techniques - will help
 to create designs that are closer to the problem domain (as intented by domain driven design), 
 more readable (due to their declarative character), allow equational reasoning, will provide more rigid
 separation of business logic and side effects,
 are more flexible for future changes or extensions, provide better testability (supporting BDD, TDD and property based testing), 
-will need much less debugging, are better to maintain and, last not least, will be more fun to write.
+will need much less debugging, are better to maintain and, last but not least, will be more fun to write.
 
