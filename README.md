@@ -1493,7 +1493,7 @@ Nothing
 Nothing
 ```
 
-The resulting control flow is depicted in the following diagram:
+The resulting control flow is depicted in the following diagram, which was inspired by the [Railroad Oriented Programming](https://fsharpforfunandprofit.com/rop/) presentation:
 ![The Maybe railroad](img/maybe.png)
 
 In each single step we have to check for `Nothing`, in that case we directly short circuit to an overall `Nothing` result value.
