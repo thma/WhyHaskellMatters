@@ -873,7 +873,7 @@ In most programming languages both arguments will be
 evaluated before the function body is executed: 
 they use applicative order reduction aka. eager evaluation or call-by-value semantics.
 
-In Haskell on the other hand it is save to call the function with a non-terminating expression in the second argument.
+In Haskell on the other hand it is safe to call the function with a non-terminating expression in the second argument.
 First we create a non-terminating expression `viciousCircle`. Any attempt to evaluate it will result in an endless loop:
 
 ```haskell
@@ -909,7 +909,7 @@ evens = [2,4..]
 odds  = [1,3..]
 ```
 
-Defining those infinite lists is rather easy. But can we do with them? Are they useful for any purpose? In the `viciousCircle` example above we have learnt that
+Defining those infinite lists is rather easy. But what can we do with them? Are they useful for any purpose? In the `viciousCircle` example above we have learnt that
 defining that expression is fine but any attempt to evaluate it will result in an infinite loop.
 
 If we try to print `naturalNumbers` we will also end up in an infinite loop of integers printed to the screen.
