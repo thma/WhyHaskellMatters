@@ -1,7 +1,6 @@
 module TypeClasses where
 
 import AlgebraicDataTypes (Status (..), Severity (..), PairStatusSeverity (..), Tree (..))
-import Data.Foldable
 import Data.Char (toUpper)
 
 instance Num Char where

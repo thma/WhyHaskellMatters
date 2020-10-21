@@ -1,8 +1,10 @@
 module Lists where
 
-import Prelude hiding (map, foldr, length, filter)
-import qualified Prelude as P (foldr)
+import Prelude hiding (map, foldr, length, filter, sum)
+--import qualified Prelude as P (foldr)
 import Functions (square, double)
+
+--data [a] = [] | a : [a]
 
 -- a list of numbers to play around with
 someNumbers :: [Integer]
@@ -15,11 +17,12 @@ upToHundred = [1..100]
 oddsUpToHundred :: [Integer]
 oddsUpToHundred = [1,3..100]
 
+fac' :: Integer -> Integer
 fac' n   = prod [1..n]
 
 length :: [a] -> Integer
 length []     =  0
-length (x:xs) =  1 + length xs
+length (_x:xs) =  1 + length xs
 
 filter :: (a -> Bool) -> [a] -> [a]
 filter _pred []    = []
@@ -55,9 +58,9 @@ squareAll' :: [Integer] -> [Integer]
 squareAll' = map square
 
 
-sumUp :: [Integer] -> Integer
-sumUp [] = 0
-sumUp (n:rest) = n + sumUp rest
+sum :: [Integer] -> Integer
+sum [] = 0
+sum (n:rest) = n + sum rest
 
 prod :: [Integer] -> Integer
 prod [] = 1
@@ -81,6 +84,13 @@ prod' = foldr (*) 1
 -- making use of such abstract higher order functions
 -- algorithms can be defined in a dense declarative way
 
+len :: [a] -> Integer
+len = foldr count 0
+  where count _ n = n + 1
+
+map' :: (a1 -> a2) -> [a1] -> [a2]
+map' f = foldr ((:) . f) []
+
 -- now we have map and a reduce, what about the legendary map/reduce?
 -- it's called foldMap in Haskell
 
@@ -90,5 +100,57 @@ prod' = foldr (*) 1
 -- and combine the results.
 foldMap :: (Monoid m) => (a -> m) -> [a] -> m
 foldMap f = foldr (mappend . f) mempty
+
+
+
+
+
+-- building stuff based on lists
+
+newtype Stack a = Stck [a] deriving Show
+
+sempty :: Stack a
+sempty = Stck []
+
+pop :: Stack a -> (a, Stack a)
+pop (Stck [])     = error "Stack is empty!"
+pop (Stck (x:xs)) = (x, Stck xs)
+
+push :: Stack a -> a -> Stack a
+push (Stck l) x = Stck (x : l)
+
+rev :: Stack a -> Stack a
+rev (Stck xs) = Stck (reverse xs)
+
+
+type Queue a = (Stack a, Stack a)
+
+qempty :: Queue a
+qempty = (sempty, sempty)
+
+enqueue :: Queue a -> a -> Queue a
+enqueue (inStack, outStack) x = (push inStack x, outStack)
+
+dequeue :: Queue a -> (a, Queue a)
+dequeue (Stck [], Stck []) = error "Queue is empty!"
+dequeue (inStack, Stck []) = 
+  let revertedInStack = rev inStack
+      (x, restInstack) = pop revertedInStack
+  in (x, (Stck [], restInstack))
+dequeue (inStack, outStack) = 
+  let (x, restOutStack) = pop outStack
+  in (x, (inStack, restOutStack))
+
+type Queue' a = [a]
+
+qempty' :: Queue' a
+qempty' = []
+
+enqueue' :: Queue' a -> a -> Queue' a
+enqueue' q x = x:q
+
+dequeue' :: Queue' a -> (a, Queue' a)
+dequeue' [] = error "Queue is empty!"
+dequeue' xs = (last xs, init xs)
 
 

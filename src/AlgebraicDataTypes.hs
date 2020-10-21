@@ -22,20 +22,22 @@ data Pair = P Status Severity --deriving (Show)
 
 data Tree a = Leaf a | Node (Tree a) (Tree a) deriving (Eq, Show, Read, Functor, Foldable)
 
---data  Maybe a  =  Nothing | Just a deriving (Eq, Ord)
-{--
-lookup                  :: (Eq a) => a -> [(a,b)] -> Maybe b
-lookup _key []          =  Nothing
-lookup  key ((x,y):xys)
+-- data  Maybe a  =  Nothing | Just a deriving (Eq, Ord)
+{--}
+lookup'                 :: String -> [(String,Double)] -> Maybe Double
+lookup' _key []         =  Nothing
+lookup'  key ((x,y):xys)
     | key == x          =  Just y
-    | otherwise         =  lookup key xys
+    | otherwise         =  lookup' key xys
 --}
 
-safeDiv :: (Eq a, Fractional a) => a -> a -> Maybe a
+--safeDiv :: (Eq a, Fractional a) => a -> a -> Maybe a
+safeDiv :: Double -> Double -> Maybe Double
 safeDiv _ 0 = Nothing
 safeDiv x y = Just (x / y)
 
-safeRoot :: (Ord a, Floating a) => a -> Maybe a
+--safeRoot :: (Ord a, Floating a) => a -> Maybe a
+safeRoot :: Double -> Maybe Double
 safeRoot x
   | x < 0     = Nothing
   | otherwise = Just (sqrt x)
@@ -54,15 +56,16 @@ andThen :: Maybe a -> (a -> Maybe b) -> Maybe b
 andThen Nothing _fun = Nothing
 andThen (Just x) fun = fun x
 
+findDivRoot'''' :: Eq a => Double -> a -> [(a, Double)] -> Maybe Double
 findDivRoot'''' x key map =
   lookup key map `andThen` \y ->
   safeDiv x y    `andThen` \d ->
   safeRoot d
 
 findDivRoot' x key map =
-  lookup key map >>= \y ->
-  safeDiv x y    >>= \d ->
-  safeRoot d
+  lookup key map >>= -- \y ->
+  safeDiv x    >>= -- \d ->
+  safeRoot
 
 findDivRoot'' x key map = 
   lookup key map >>=

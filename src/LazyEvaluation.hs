@@ -1,12 +1,13 @@
 module LazyEvaluation where
 
-import Data.Natural
+import Data.Natural ( Natural )
 
 -- it's possible to define non-terminating expressions like
 viciousCircle :: a
 viciousCircle = viciousCircle
 
 -- this expression returns True because of lazy evaluation:
+test :: Bool
 test = (4 == 4) || viciousCircle
 
 ignoreY :: Integer -> Integer -> Integer
@@ -14,12 +15,15 @@ ignoreY x y = x
 
 -- arithmetic sequences
 -- all natural numbers
+naturalNumbers :: [Integer]
 naturalNumbers = [0..]
 
 -- all even numbers
+evens :: [Integer]
 evens = [2,4..]
 
 -- all odd numbers
+odds :: [Integer]
 odds  = [1,3..]
 
 fibs :: [Integer]
@@ -53,16 +57,16 @@ myIf :: Bool -> b -> b -> b
 myIf p x y = if p then x else y    
 
 cond :: [(Bool, a)] -> a
-cond []                 = error "make sure that at least one condition is true"
-cond ((True,  v):rest)  = v
-cond ((False, _):rest)  = cond rest
+cond []                  = error "make sure that at least one condition is true"
+cond ((True,  v):_rest)  = v
+cond ((False, _):rest)   = cond rest
 
 sign :: (Ord a, Num a) => a -> a
 sign x = cond [(x > 0     , 1 )
               ,(x < 0     , -1)
               ,(otherwise , 0 )]
               
--- |An operator that allows you to write C-style ternary conditionals of
+-- | An operator that allows you to write C-style ternary conditionals of
 -- the form:
 -- > p ? t ?? f
 infixr  0 ?
