@@ -42,26 +42,25 @@ use it to validate the following numbers:
 divisibleBy10 :: Int -> Bool
 divisibleBy10 = (0 ==) . (`mod` 10)
 
-sumDigits :: [Int] -> Int
-sumDigits = sum . map (uncurry (+) . (`divMod` 10))   -- map (uncurry (+) . (`divMod` 10)) [6,2,7,16,9,6,7,4,9,18,4] -> [6,2,7,7,9,6,7,4,9,9,4]
+sumUpDigits :: [Int] -> Int
+sumUpDigits = sum . map (uncurry (+) . (`divMod` 10))   -- map (uncurry (+) . (`divMod` 10)) [6,2,7,16,9,6,7,4,9,18,4] -> [6,2,7,7,9,6,7,4,9,9,4]
 
-double2nd :: [Int] -> [Int]   
-double2nd = zipWith (*) (cycle [1,2])                 -- zipWith (*) [6,1,7,8,9,3,7,2,9,9,4] [1,2,1,2,1,2,1,2,1,2,1] -> [6,2,7,16,9,6,7,4,9,18,4]
+doubleEach2nd :: [Int] -> [Int]
+doubleEach2nd = zipWith (*) (cycle [1,2])             -- zipWith (*) [6,1,7,8,9,3,7,2,9,9,4] [1,2,1,2,1,2,1,2,1,2,1] -> [6,2,7,16,9,6,7,4,9,18,4]
 
-toDigits :: Natural -> [Int]
-toDigits = map digitToInt . show                      -- toDigits 49927398716 -> [4,9,9,2,7,3,9,8,7,1,6]
+splitIntoDigits :: Natural -> [Int]
+splitIntoDigits = reverse . map digitToInt . show                      -- toDigits 49927398716 -> [4,9,9,2,7,3,9,8,7,1,6]
 
 luhn1 :: Natural -> Bool
-luhn1 = divisibleBy10 . sumDigits . double2nd . reverse . toDigits
+luhn1 = divisibleBy10 . sumUpDigits . doubleEach2nd . splitIntoDigits
 
 luhn2 :: Natural -> Bool
-luhn2 n = divisibleBy10 (sumDigits (double2nd (reverse (toDigits n))))
+luhn2 n = divisibleBy10 (sumUpDigits (doubleEach2nd (splitIntoDigits n)))
 
 luhn3 :: Natural -> Bool
-luhn3 = toDigits  >>> 
-        reverse   >>>
-        double2nd >>>
-        sumDigits >>>
+luhn3 = splitIntoDigits  >>>
+        doubleEach2nd >>>
+        sumUpDigits >>>
         divisibleBy10
        
 luhn4 :: Natural -> Bool
